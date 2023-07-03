@@ -38,10 +38,14 @@ function getDirection(x: number, y: number) {
     }
 }
 
-export const rotate = (heading: number) => (pair: [number, number]): [number, number] => {
+export type Point = [number, number]
+
+export const rotate = (heading: number) => (pair: Point): Point => {
     const [x, y] = pair
     const m = getMagnitude(x, y)
     const d = getDirection(x, y) ?? 0
     const r = getXYVector(m, d + heading)
     return [r.x, r.y]
 }
+
+export const translate = (x: number, y: number) => (point: Point): Point => { return [point[0] + x, point[1] + y] }

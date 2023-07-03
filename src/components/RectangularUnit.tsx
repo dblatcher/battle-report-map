@@ -1,4 +1,6 @@
-import { rotate } from "@/lib/geometry";
+import { Point, rotate, translate } from "@/lib/geometry";
+
+type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
 
 interface Props {
     x: number;
@@ -7,23 +9,27 @@ interface Props {
     height: number;
     heading?: number;
     arrowSize?: number;
+    col1?: string;
+    col2?: string;
+    patternShape?: PatternShape;
 }
 
-const pointToString = (pair: [number, number]) => `${pair[0]},${pair[1]}`
 
-export const RectangularUnit = ({ x, y, width, height, heading = 0, arrowSize = 3 }: Props) => {
+const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 
-    const rotateByHeading = rotate(heading)
-    const translate = (p: [number, number]): [number, number] => { return [p[0] + x, p[1] + y] }
-    const topLeft: [number, number] = [- width / 2, - height / 2]
-    const arrowLeft: [number, number] = [- arrowSize, - height / 2]
-    const arrowFront: [number, number] = [0, - height / 2 - arrowSize]
-    const arrowRight: [number, number] = [arrowSize, - height / 2]
-    const topRight: [number, number] = [width / 2, - height / 2]
-    const bottomRight: [number, number] = [width / 2, + height / 2]
-    const bottomLeft: [number, number] = [- width / 2, + height / 2]
+export const RectangularUnit = ({ x, y, width, height, heading = 0, arrowSize = 2, col1 = 'red', col2 = 'blue', patternShape }: Props) => {
+    const topLeft: Point = [- width / 2, - height / 2]
+    const arrowLeft: Point = [- arrowSize, - height / 2]
+    const arrowFront: Point = [0, - height / 2 - arrowSize]
+    const arrowRight: Point = [arrowSize, - height / 2]
+    const topRight: Point = [width / 2, - height / 2]
+    const bottomRight: Point = [width / 2, + height / 2]
+    const bottomLeft: Point = [- width / 2, + height / 2]
 
-    const pointsString = [
+    const midLeft: Point = [-width / 2, 0]
+    const midRight: Point = [+width / 2, 0]
+
+    const outline = [
         topLeft,
         arrowLeft,
         arrowFront,
@@ -31,13 +37,29 @@ export const RectangularUnit = ({ x, y, width, height, heading = 0, arrowSize = 
         topRight,
         bottomRight,
         bottomLeft
-    ].map(rotateByHeading)
-        .map(translate)
+    ].map(rotate(heading))
+        .map(translate(x, y))
         .map(pointToString)
         .join(" ")
 
-    return <>
-        <polygon points={pointsString} fill="none" stroke="black" />
-        <circle cx={x} cy={y} r={1} />
-    </>
+
+    const patternPoints = patternShape === 'left-diagonal' ?
+        [
+            topLeft,
+            bottomRight,
+            bottomLeft
+        ] : patternShape === 'right-diagonal' ? [topRight, bottomLeft, bottomRight] : patternShape === 'vertical' ? [
+            midLeft, midRight, bottomRight, bottomLeft
+        ] : undefined
+
+    const pattern = patternPoints?.map(rotate(heading))
+        .map(translate(x, y))
+        .map(pointToString)
+        .join(" ")
+
+    return <g>
+        <polygon points={outline} fill={col1} stroke="none" />
+        {pattern && <polygon points={pattern} fill={col2} stroke="none" />}
+        <polygon points={outline} fill="none" stroke="black" />
+    </g>
 }
