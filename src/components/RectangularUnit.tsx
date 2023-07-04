@@ -1,18 +1,9 @@
 import { Point, rotate, translate } from "@/lib/geometry";
+import { Unit } from "@/types";
 
-type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
 
-interface Props {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    heading?: number;
-    arrowSize?: number;
-    col1?: string;
-    col2?: string;
-    patternShape?: PatternShape;
-}
+
+type Props = Unit
 
 
 const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
