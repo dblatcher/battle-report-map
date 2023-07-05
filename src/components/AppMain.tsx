@@ -7,11 +7,11 @@ import { Position, Unit, UnitDesign } from "@/types"
 import { RectangularUnit } from "./RectangularUnit"
 import { UnitDesigner } from "./UnitDesigner"
 import { UnitControl } from "./UnitControl"
+import { useArrayState } from "@/lib/useArrayState"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
-    const [units, setUnits] = useState<Unit[]>([
-    ])
+    const [units, setUnits, unit] = useArrayState<Unit>([])
 
     const handleConfirmDesign = (unit: UnitDesign) => {
         setUnitDesignerOpen(false)
@@ -27,15 +27,7 @@ export const AppMain = () => {
     }
 
     const handleMove = (position: Position, index: number) => {
-        const original = units[index]
-        const changed = {
-            ...original, ...position
-        }
-        setUnits([
-            ...units.slice(0, index),
-            changed,
-            ...units.slice(index + 1)
-        ])
+        unit.merge(index, position)
     }
 
     return (

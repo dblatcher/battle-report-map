@@ -30,6 +30,7 @@ export const UnitControl = ({ unit, move }: Props) => {
             <Button size="small" onClick={up}>&uarr;</Button>
             <Button size="small" onClick={down}>&darr;</Button>
             <Button size="small" onClick={left}>&larr;</Button>
+            <Button size="small" onClick={right}>&rarr;</Button>
             <Button size="small" onClick={antiClockwise}>↺</Button>
             <Button size="small" onClick={clockwise}>↻</Button>
         </Box>
