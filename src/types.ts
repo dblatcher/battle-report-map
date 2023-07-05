@@ -4,9 +4,7 @@ export type Position = {
     heading?: number;
 }
 
-export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
-
-export type Unit = Position & {
+export type UnitDesign = {
     width: number;
     height: number;
     arrowSize?: number;
@@ -14,3 +12,7 @@ export type Unit = Position & {
     col2?: string;
     patternShape?: PatternShape;
 }
+
+export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
+
+export type Unit = Position & UnitDesign

@@ -13,7 +13,7 @@ interface Props {
 
 }
 
-export const SvgFrame = ({ style = {}, viewBox = {}, children }: Props) => {
+export const SvgFrame = ({ style = { margin: 0 }, viewBox = {}, children }: Props) => {
 
     const { minX = 0, minY = 0, width = 100, height = 100 } = viewBox
     const viewBoxString = `${minX} ${minY} ${width} ${height}`
