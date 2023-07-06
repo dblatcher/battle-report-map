@@ -24,7 +24,6 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
     }
 
     return <Box {...boxProps}>
-
         <svg
             ref={svgRef}
             viewBox={viewBoxString}
@@ -32,8 +31,6 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
         >
             {children}
         </svg>
-
         <Button variant='outlined' onClick={download}>download</Button>
     </Box>
-
 }
