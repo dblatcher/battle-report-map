@@ -8,6 +8,7 @@ import { RectangularUnit } from "./RectangularUnit"
 import { UnitDesigner } from "./UnitDesigner"
 import { UnitControl } from "./UnitControl"
 import { useArrayState } from "@/lib/useArrayState"
+import { svgToPng } from "@/lib/svgToPng"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
@@ -35,7 +36,7 @@ export const AppMain = () => {
             <Typography variant="h2">app</Typography>
             <Grid container>
                 <Grid item xs={8}>
-                    <SvgFrame style={{ backgroundColor: 'lightgreen' }}>
+                    <SvgFrame style={{ backgroundColor: 'lightgreen' }} refFunc={svgToPng}>
                         {units.map((unit, index) => <RectangularUnit key={index} {...unit} />)}
                     </SvgFrame>
                 </Grid>
