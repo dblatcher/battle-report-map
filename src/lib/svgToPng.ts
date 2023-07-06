@@ -1,6 +1,6 @@
-function triggerDownload(imgURI: string) {
+function triggerDownload(imgURI: string, fileName: string) {
     const a = document.createElement('a');
-    a.download = 'MY_COOL_IMAGE.png'; // filename
+    a.download = fileName
     a.target = '_blank';
     a.href = imgURI;
 
@@ -15,7 +15,7 @@ function triggerDownload(imgURI: string) {
 }
 
 
-export function svgToPng(svgNode: SVGSVGElement) {
+export function svgToPng(svgNode: SVGSVGElement, fileName: string = 'image.png') {
     const svgString = (new XMLSerializer()).serializeToString(svgNode);
     const svgBlob = new Blob([svgString], {
         type: 'image/svg+xml;charset=utf-8'
@@ -28,7 +28,6 @@ export function svgToPng(svgNode: SVGSVGElement) {
     image.width = svgNode.width.baseVal.value;
     image.height = svgNode.height.baseVal.value;
     image.src = url;
-
 
     image.onload = function () {
         const canvas = document.createElement('canvas')
@@ -45,6 +44,6 @@ export function svgToPng(svgNode: SVGSVGElement) {
         const imgURI = canvas
             .toDataURL('image/png')
             .replace('image/png', 'image/octet-stream');
-        triggerDownload(imgURI);
+        triggerDownload(imgURI, fileName);
     };
 };

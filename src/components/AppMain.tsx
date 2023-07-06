@@ -1,14 +1,13 @@
 'use client'
 
-import { Box, Button, Container, Dialog, DialogContent, Grid, Typography } from "@mui/material"
-import { SvgFrame } from "./SvgFrame"
-import { useState } from "react"
-import { Position, Unit, UnitDesign } from "@/types"
-import { RectangularUnit } from "./RectangularUnit"
-import { UnitDesigner } from "./UnitDesigner"
-import { UnitControl } from "./UnitControl"
 import { useArrayState } from "@/lib/useArrayState"
-import { svgToPng } from "@/lib/svgToPng"
+import { Position, Unit, UnitDesign } from "@/types"
+import { Box, Button, Container, Dialog, DialogContent, Grid, Typography } from "@mui/material"
+import { useState } from "react"
+import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
+import { RectangularUnit } from "./RectangularUnit"
+import { UnitControl } from "./UnitControl"
+import { UnitDesigner } from "./UnitDesigner"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
@@ -36,9 +35,9 @@ export const AppMain = () => {
             <Typography variant="h2">app</Typography>
             <Grid container>
                 <Grid item xs={8}>
-                    <SvgFrame style={{ backgroundColor: 'lightgreen' }} refFunc={svgToPng}>
+                    <DownloadableSvgFrame fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }}>
                         {units.map((unit, index) => <RectangularUnit key={index} {...unit} />)}
-                    </SvgFrame>
+                    </DownloadableSvgFrame>
                 </Grid>
                 <Grid item xs={4}>
                     {units.map((unit, index) => <UnitControl key={index} unit={unit} move={(position) => { handleMove(position, index) }} />)}
