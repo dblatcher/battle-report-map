@@ -24,10 +24,9 @@ export const FrameControl = ({ viewBox, setViewBox, background, setBackground }:
     const makeHandler = (property: keyof ViewBox): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => (event) => { changeProperty(property, event.target.value) }
 
     return (
-        <Stack direction={'row'}>
+        <Stack direction={'row'} marginBottom={1}>
             <TextField label='height' type="number" value={viewBox.height} onChange={makeHandler('height')} />
             <TextField label='width' type="number" value={viewBox.width} onChange={makeHandler('width')} />
-
             <TextField sx={{ minWidth: 100 }} label='background' type="color" value={background} onChange={ev => { setBackground(ev.target.value) }} />
         </Stack>
     )

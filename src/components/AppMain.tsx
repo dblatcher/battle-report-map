@@ -45,12 +45,12 @@ export const AppMain = () => {
                     </DownloadableSvgFrame>
                 </Grid>
                 <Grid item xs={4} paddingX={1}>
+                    <FrameControl viewBox={viewBox} setViewBox={setViewBox} background={background} setBackground={setBackground} />
                     {units.map((unit, index) => <UnitControl key={index} unit={unit} move={(position) => { handleMove(position, index) }} />)}
                     <Box>
                         <Button variant="outlined" onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
                     </Box>
 
-                    <FrameControl viewBox={viewBox} setViewBox={setViewBox} background={background} setBackground={setBackground} />
                 </Grid>
             </Grid>
 
