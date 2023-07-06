@@ -1,5 +1,5 @@
 import { Position, Unit } from "@/types";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 type Props = { unit: Unit, move: { (position: Position): void } }
 
@@ -25,8 +25,8 @@ export const UnitControl = ({ unit, move }: Props) => {
     }
 
     return (
-        <Box>
-            <p>[{unit.x}, {unit.y}] {unit.heading?.toFixed(1)}</p>
+        <Box borderColor={'primary.dark'} border={1} marginBottom={1} padding={1}>
+            <Typography>[{unit.x}, {unit.y}] {unit.heading?.toFixed(1)}</Typography>
             <Button size="small" onClick={up}>&uarr;</Button>
             <Button size="small" onClick={down}>&darr;</Button>
             <Button size="small" onClick={left}>&larr;</Button>

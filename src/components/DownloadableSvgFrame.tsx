@@ -1,4 +1,5 @@
 import { svgToPng } from "@/lib/svgToPng"
+import { ViewBox } from "@/types"
 import { Box, Button, BoxProps } from "@mui/material"
 import { ReactNode, useRef } from "react"
 
@@ -6,12 +7,7 @@ import { ReactNode, useRef } from "react"
 interface Props {
     boxProps?: BoxProps
     children?: ReactNode
-    viewBox?: {
-        minX?: number
-        minY?: number
-        width?: number
-        height?: number
-    }
+    viewBox?: ViewBox
     fileName: string
 }
 
