@@ -41,7 +41,7 @@ export const AppMain = () => {
                 <Grid item xs={8}>
                     <DownloadableSvgFrame fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={viewBox}>
                         <FloodRect fill={background} viewBox={viewBox} />
-                        {units.map((unit, index) => <RectangularUnit key={index} {...unit} />)}
+                        {units.map((unit, index) => <RectangularUnit key={index} unit={unit} />)}
                     </DownloadableSvgFrame>
                 </Grid>
                 <Grid item xs={4} paddingX={1}>

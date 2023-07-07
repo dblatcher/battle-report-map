@@ -3,12 +3,13 @@ import { Unit } from "@/types";
 
 
 
-type Props = Unit
+type Props = { unit: Unit }
 
 
 const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 
-export const RectangularUnit = ({ x, y, width, height, heading = 0, arrowSize = 2, col1 = 'red', col2 = 'blue', patternShape }: Props) => {
+export const RectangularUnit = ({ unit }: Props) => {
+    const { x, y, width, height, heading = 0, arrowSize = 2, col1 = 'red', col2 = 'blue', patternShape } = unit
     const topLeft: Point = [- width / 2, - height / 2]
     const arrowLeft: Point = [- arrowSize, - height / 2]
     const arrowFront: Point = [0, - height / 2 - arrowSize]

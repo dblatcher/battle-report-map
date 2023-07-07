@@ -15,7 +15,12 @@ export const RectangularUnitInFrame = ({ unit }: Props) => {
             minX: -width / 2,
             minY: -height / 2
         }}>
-            <RectangularUnit {...unit} heading={0} x={0} y={0 + 2 * arrowSize} />
+            <RectangularUnit unit={{
+                ...unit,
+                heading: 0,
+                x: 0,
+                y: 2 * arrowSize
+            }} />
         </SvgFrame>
     )
 }
