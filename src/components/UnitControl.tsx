@@ -9,9 +9,10 @@ type Props = {
     index: number,
     activeIndex?: number,
     select: { (on: boolean): void }
+    deleteUnit: { (): void }
 }
 
-export const UnitControl = ({ unit, move, index, activeIndex, select }: Props) => {
+export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit }: Props) => {
 
     const clockwise = () => {
         move({ ...unit, heading: (unit.heading ?? 0) - 5 * _DEG })
@@ -21,9 +22,10 @@ export const UnitControl = ({ unit, move, index, activeIndex, select }: Props) =
     }
 
     return (
-        <Stack padding={1} direction={'row'} spacing={1} alignItems={'center'} marginBottom={1} borderColor={'primary.dark'} border={1} >
-            <RectangularUnitInFrame unit={unit} boxProps={{ flexBasis: 50 }} />
-            <Box>
+        <Box padding={1} borderColor={'primary.dark'} border={1}>
+            <Typography>[{unit.x}, {unit.y}] {inDegrees(unit.heading ?? 0)?.toFixed(0)}°</Typography>
+            <Stack direction={'row'} spacing={1} alignItems={'center'} marginBottom={1}  >
+                <RectangularUnitInFrame unit={unit} boxProps={{ flexBasis: 50 }} />
                 <Stack direction={'row'}>
                     <Switch size="small" onChange={() => { select(activeIndex !== index) }} checked={activeIndex === index} />
                     <ButtonGroup>
@@ -31,8 +33,9 @@ export const UnitControl = ({ unit, move, index, activeIndex, select }: Props) =
                         <Button size="small" onClick={clockwise}>↻</Button>
                     </ButtonGroup>
                 </Stack>
-                <Typography>[{unit.x}, {unit.y}] {inDegrees(unit.heading ?? 0)?.toFixed(0)}°</Typography>
-            </Box>
-        </Stack>
+
+                <Button variant="outlined" size="small" onClick={deleteUnit}>X</Button>
+            </Stack>
+        </Box>
     )
 }

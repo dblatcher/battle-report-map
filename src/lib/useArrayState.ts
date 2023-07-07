@@ -7,6 +7,7 @@ export function useArrayState<T>(initialValue: T[]): [
         set: (index: number, newMember: T) => void;
         merge: (index: number, changes: Partial<T>) => void;
         push: (newMember: T) => void;
+        deleteItem: (index: number) => void;
     }
 ] {
     const [array, setArray] = useState<T[]>(initialValue)
@@ -37,6 +38,12 @@ export function useArrayState<T>(initialValue: T[]): [
             newMember,
         ])
     }
+    const deleteItem = (index: number) => {
+        return setArray([
+            ...array.slice(0, index),
+            ...array.slice(index + 1)
+        ])
+    }
 
-    return [array, setArray, { set, merge, push }]
+    return [array, setArray, { set, merge, push, deleteItem }]
 }

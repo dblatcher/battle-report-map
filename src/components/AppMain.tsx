@@ -13,7 +13,7 @@ import { FrameControl } from "./FrameControl"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
-    const [units, setUnits, unit] = useArrayState<Unit>([])
+    const [units, setUnits, unitArray] = useArrayState<Unit>([])
     const [viewBox, setViewBox] = useState<ViewBox>({ width: 300, height: 200 })
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
     const [background, setBackground] = useState<string>('#44AA33')
@@ -21,7 +21,7 @@ export const AppMain = () => {
     const handleConfirmDesign = (newUnit: UnitDesign) => {
         setUnitDesignerOpen(false)
         setActiveUnitIndex(units.length)
-        unit.push(
+        unitArray.push(
             {
                 ...newUnit,
                 x: viewBox.minX ?? 0,
@@ -32,12 +32,12 @@ export const AppMain = () => {
     }
 
     const handleMove = (position: Position, index: number) => {
-        unit.merge(index, position)
+        unitArray.merge(index, position)
     }
 
     const handleFrameClick = (coordinates: { x: number, y: number }) => {
         if (typeof activeUnitIndex === 'number') {
-            unit.merge(activeUnitIndex, coordinates)
+            unitArray.merge(activeUnitIndex, coordinates)
         }
     }
 
@@ -50,7 +50,12 @@ export const AppMain = () => {
                         reportClick={handleFrameClick}
                         fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={viewBox}>
                         <FloodRect fill={background} viewBox={viewBox} />
-                        {units.map((unit, index) => <RectangularUnit key={index} unit={unit} />)}
+                        {units.map((unit, index) => (
+                            <RectangularUnit
+                                isActive={activeUnitIndex === index}
+                                key={index}
+                                unit={unit} />
+                        ))}
                     </DownloadableSvgFrame>
                 </Grid>
                 <Grid item xs={4} paddingX={1}>
@@ -68,7 +73,9 @@ export const AppMain = () => {
                             select={(on) => {
                                 setActiveUnitIndex(on ? index : undefined)
                             }}
-                            move={(position) => { handleMove(position, index) }} />
+                            move={(position) => { handleMove(position, index) }}
+                            deleteUnit={() => { unitArray.deleteItem(index) }}
+                        />
                     ))}
                     <Box>
                         <Button variant="outlined" onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>

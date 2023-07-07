@@ -3,12 +3,12 @@ import { Unit } from "@/types";
 
 
 
-type Props = { unit: Unit }
+type Props = { unit: Unit, isActive?: boolean }
 
 
 const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 
-export const RectangularUnit = ({ unit }: Props) => {
+export const RectangularUnit = ({ unit, isActive }: Props) => {
     const { x, y, width, height, heading = 0, arrowSize = 2, col1 = 'red', col2 = 'blue', patternShape } = unit
     const topLeft: Point = [- width / 2, - height / 2]
     const arrowLeft: Point = [- arrowSize, - height / 2]
@@ -49,9 +49,11 @@ export const RectangularUnit = ({ unit }: Props) => {
         .map(pointToString)
         .join(" ")
 
-    return <g>
-        <polygon points={outline} fill={col1} stroke="none" />
-        {pattern && <polygon points={pattern} fill={col2} stroke="none" />}
-        <polygon points={outline} fill="none" stroke="black" />
-    </g>
+    return (
+        <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}>
+            <polygon points={outline} fill={col1} stroke="none" />
+            {pattern && <polygon points={pattern} fill={col2} stroke="none" />}
+            <polygon points={outline} fill="none" stroke="black" />
+        </g>
+    )
 }
