@@ -1,6 +1,7 @@
 import { Position, Unit } from "@/types";
 import { Box, Button, ButtonGroup, Stack, Switch, Typography } from "@mui/material";
 import { RectangularUnitInFrame } from "./RectangularUnitInFrame";
+import { _DEG, inDegrees } from "@/lib/uitl";
 
 type Props = {
     unit: Unit,
@@ -13,10 +14,10 @@ type Props = {
 export const UnitControl = ({ unit, move, index, activeIndex, select }: Props) => {
 
     const clockwise = () => {
-        move({ ...unit, heading: (unit.heading ?? 0) - .1 })
+        move({ ...unit, heading: (unit.heading ?? 0) - 5 * _DEG })
     }
     const antiClockwise = () => {
-        move({ ...unit, heading: (unit.heading ?? 0) + .1 })
+        move({ ...unit, heading: (unit.heading ?? 0) + 5 * _DEG })
     }
 
     return (
@@ -30,7 +31,7 @@ export const UnitControl = ({ unit, move, index, activeIndex, select }: Props) =
                         <Button size="small" onClick={clockwise}>↻</Button>
                     </ButtonGroup>
                 </Stack>
-                <Typography>[{unit.x}, {unit.y}] {unit.heading?.toFixed(1)}</Typography>
+                <Typography>[{unit.x}, {unit.y}] {inDegrees(unit.heading ?? 0)?.toFixed(0)}°</Typography>
             </Box>
         </Stack>
     )
