@@ -11,6 +11,13 @@ export type Position = {
     heading: number;
 }
 
+export type Badge = {
+    href: string;
+    description: string;
+    height: number;
+    width: number;
+}
+
 export type UnitDesign = {
     width: number;
     height: number;
@@ -19,6 +26,7 @@ export type UnitDesign = {
     col2: string;
     patternShape?: PatternShape;
     shape: 'rectangle' | 'triangle';
+    badge?: Badge
 }
 
 export type Markers = {

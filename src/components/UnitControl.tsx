@@ -44,7 +44,7 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
                     }}>hit+</Button>
                     <Button onClick={() => {
                         setMarkers({
-                            hits: -1 + (unit.hits ?? 0)
+                            hits: Math.max(-1 + (unit.hits ?? 0), 0)
                         })
                     }}>hit-</Button>
                 </ButtonGroup>

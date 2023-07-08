@@ -1,5 +1,7 @@
+import { badges } from "@/lib/badges"
 import { UnitDesign } from "@/types"
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material"
+import Image from "next/image"
 import { ChangeEventHandler, useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 
@@ -104,6 +106,18 @@ export const UnitDesigner = ({ confirm }: Props) => {
                 <Stack direction={'row'}>
                     <TextField sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
                     <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
+                </Stack>
+                <Stack direction={'row'}>
+                    {badges.map((badge, index) => (
+                        <Button key={index}
+                            onClick={() => { setUnit({ ...unit, badge: {...badge} }) }}
+                        >
+                            <Image src={badge.href} 
+                                width={40} 
+                                height={badge.height * (40 / badge.width)} 
+                                alt={`select badge: ${badge.description}`} />
+                        </Button>
+                    ))}
                 </Stack>
                 <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
             </Grid>
