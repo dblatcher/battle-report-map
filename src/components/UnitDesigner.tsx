@@ -1,8 +1,6 @@
 import { UnitDesign } from "@/types"
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material"
 import { ChangeEventHandler, useState } from "react"
-import { SvgFrame } from "./SvgFrame"
-import { UnitFigure } from "./UnitFigure"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 
 interface Props {
