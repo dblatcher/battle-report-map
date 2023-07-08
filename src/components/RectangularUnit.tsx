@@ -1,6 +1,6 @@
 import { Point, rotate, translate } from "@/lib/geometry";
+import { getRectangularUnitPoints } from "@/lib/shapes";
 import { Unit } from "@/types";
-
 
 
 type Props = { unit: Unit, isActive?: boolean }
@@ -9,40 +9,14 @@ type Props = { unit: Unit, isActive?: boolean }
 const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 
 export const RectangularUnit = ({ unit, isActive }: Props) => {
-    const { x, y, width, height, heading = 0, arrowSize = 2, col1 = 'red', col2 = 'blue', patternShape } = unit
-    const topLeft: Point = [- width / 2, - height / 2]
-    const arrowLeft: Point = [- arrowSize, - height / 2]
-    const arrowFront: Point = [0, - height / 2 - arrowSize]
-    const arrowRight: Point = [arrowSize, - height / 2]
-    const topRight: Point = [width / 2, - height / 2]
-    const bottomRight: Point = [width / 2, + height / 2]
-    const bottomLeft: Point = [- width / 2, + height / 2]
+    const { x, y, heading = 0, col1 = 'red', col2 = 'blue' } = unit
 
-    const midLeft: Point = [-width / 2, 0]
-    const midRight: Point = [+width / 2, 0]
+    const { outlinePoints, patternPoints } = getRectangularUnitPoints(unit)
 
-    const outline = [
-        topLeft,
-        arrowLeft,
-        arrowFront,
-        arrowRight,
-        topRight,
-        bottomRight,
-        bottomLeft
-    ].map(rotate(heading))
+    const outline = outlinePoints.map(rotate(heading))
         .map(translate(x, y))
         .map(pointToString)
         .join(" ")
-
-
-    const patternPoints = patternShape === 'left-diagonal' ?
-        [
-            topLeft,
-            bottomRight,
-            bottomLeft
-        ] : patternShape === 'right-diagonal' ? [topRight, bottomLeft, bottomRight] : patternShape === 'vertical' ? [
-            midLeft, midRight, bottomRight, bottomLeft
-        ] : undefined
 
     const pattern = patternPoints?.map(rotate(heading))
         .map(translate(x, y))
