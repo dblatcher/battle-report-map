@@ -83,7 +83,7 @@ export const AppMain = () => {
                 </Grid>
             </Grid>
 
-            <Dialog open={unitDesignerOpen}>
+            <Dialog open={unitDesignerOpen} maxWidth="md">
                 <DialogContent>
                     <UnitDesigner confirm={handleConfirmDesign} />
                 </DialogContent>

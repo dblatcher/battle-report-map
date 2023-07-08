@@ -3,6 +3,7 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextFie
 import { ChangeEventHandler, useState } from "react"
 import { SvgFrame } from "./SvgFrame"
 import { UnitFigure } from "./UnitFigure"
+import { UnitFigureInFrame } from "./UnitFigureInFrame"
 
 interface Props {
     confirm: { (design: UnitDesign): void }
@@ -58,13 +59,22 @@ export const UnitDesigner = ({ confirm }: Props) => {
     const makeHandler = (property: keyof UnitDesign): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => (event) => { changeUnitProperty(property, event.target.value) }
 
     return (
-        <Grid container maxWidth={'sm'}>
-            <Grid item xs={6}>
-                <TextField label='width' type="number" value={unit.width} onChange={makeHandler('width')} />
-                <TextField label='height' type="number" value={unit.height} onChange={makeHandler('height')} />
-
+        <Grid container maxWidth={'md'}>
+            <Grid item xs={8}>
                 <Stack direction={'row'}>
-                    <FormControl>
+                    <TextField label='width'
+                        type="number"
+                        value={unit.width}
+                        onChange={makeHandler('width')}
+                        inputProps={{ step: 5 }} />
+                    <TextField label='height'
+                        type="number"
+                        value={unit.height}
+                        onChange={makeHandler('height')}
+                        inputProps={{ step: 5 }} />
+                </Stack>
+                <Stack direction={'row'}>
+                    <FormControl fullWidth>
                         <InputLabel >Pattern</InputLabel>
                         <Select
                             value={unit.patternShape ?? ''}
@@ -79,7 +89,7 @@ export const UnitDesigner = ({ confirm }: Props) => {
                             <MenuItem value={'vertical'}>vertical</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl>
+                    <FormControl fullWidth>
                         <InputLabel >Shape</InputLabel>
                         <Select
                             value={unit.shape}
@@ -92,16 +102,15 @@ export const UnitDesigner = ({ confirm }: Props) => {
                             <MenuItem value={'triangle'}>triangle</MenuItem>
                         </Select>
                     </FormControl>
-
-                    <TextField sx={{ minWidth: 50 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
-                    <TextField sx={{ minWidth: 50 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
+                </Stack>
+                <Stack direction={'row'}>
+                    <TextField sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
+                    <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
                 </Stack>
                 <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
             </Grid>
-            <Grid item xs={6} >
-                <SvgFrame>
-                    <UnitFigure unit={{ ...unit, x: 50, y: 50, heading: 0 }} />
-                </SvgFrame>
+            <Grid item xs={4} display={'flex'} justifyContent={'flex-end'}>
+                <UnitFigureInFrame unit={unit} boxProps={{ flex: 1, padding: 1 }} />
             </Grid>
         </Grid>
     )
