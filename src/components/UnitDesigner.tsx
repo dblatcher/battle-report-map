@@ -2,7 +2,7 @@ import { UnitDesign } from "@/types"
 import { Button, FormControl, Grid, Input, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material"
 import { ChangeEventHandler, useState } from "react"
 import { SvgFrame } from "./SvgFrame"
-import { RectangularUnit } from "./RectangularUnit"
+import { UnitFigure } from "./UnitFigure"
 
 interface Props {
     confirm: { (design: UnitDesign): void }
@@ -13,9 +13,10 @@ export const UnitDesigner = ({ confirm }: Props) => {
     const [unit, setUnit] = useState<UnitDesign>({
         width: 20,
         height: 20,
-        patternShape: 'left-diagonal',
+        patternShape: 'vertical',
         col1: '#0000FF',
         col2: '#FF0000',
+        shape: 'triangle',
     })
 
     const changeUnitProperty = (property: keyof UnitDesign, value: string) => {
@@ -42,6 +43,15 @@ export const UnitDesigner = ({ confirm }: Props) => {
                         setUnit({ ...unit, [property]: undefined })
                         break;
                 }
+                break
+            case "shape":
+                switch (value) {
+                    case 'triangle':
+                    case 'rectangle':
+                        setUnit({ ...unit, [property]: value })
+                        break;
+                }
+                break;
         }
     }
 
@@ -69,6 +79,19 @@ export const UnitDesigner = ({ confirm }: Props) => {
                             <MenuItem value={'vertical'}>vertical</MenuItem>
                         </Select>
                     </FormControl>
+                    <FormControl>
+                        <InputLabel >Shape</InputLabel>
+                        <Select
+                            value={unit.shape}
+                            label="shape"
+                            onChange={(event) => {
+                                changeUnitProperty('shape', event.target.value)
+                            }}
+                        >
+                            <MenuItem value={'rectangle'}>rectangle</MenuItem>
+                            <MenuItem value={'triangle'}>triangle</MenuItem>
+                        </Select>
+                    </FormControl>
 
                     <TextField sx={{ minWidth: 50 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
                     <TextField sx={{ minWidth: 50 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
@@ -77,7 +100,7 @@ export const UnitDesigner = ({ confirm }: Props) => {
             </Grid>
             <Grid item xs={6} >
                 <SvgFrame>
-                    <RectangularUnit unit={{ ...unit, x: 50, y: 50, heading: 0 }} />
+                    <UnitFigure unit={{ ...unit, x: 50, y: 50, heading: 0 }} />
                 </SvgFrame>
             </Grid>
         </Grid>

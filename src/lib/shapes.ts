@@ -1,8 +1,7 @@
 import { UnitDesign } from "@/types";
 import { Point } from "./geometry";
 
-export const getRectangularUnitPoints = (design: UnitDesign) => {
-
+const getRectangularUnitPoints = (design: UnitDesign) => {
     const { width, height, arrowSize = 2, patternShape } = design
 
     const topLeft: Point = [- width / 2, - height / 2]
@@ -36,4 +35,32 @@ export const getRectangularUnitPoints = (design: UnitDesign) => {
         ] : undefined
 
     return { outlinePoints, patternPoints }
+}
+
+const getTriangularPoints = (design: UnitDesign) => {
+    const { width, height, patternShape } = design
+    const front: Point = [0, - height / 2]
+    const bottomRight: Point = [width / 2, + height / 2]
+    const bottomLeft: Point = [- width / 2, + height / 2]
+    const xAtHalfWayUp = (height/2) / (height/(width/2))
+    const halfRight: Point = [xAtHalfWayUp, 0]
+    const halfLeft: Point = [- xAtHalfWayUp, 0]
+    const outlinePoints = [
+        front,
+        bottomRight,
+        bottomLeft
+    ]
+    const patternPoints = patternShape === 'left-diagonal' ?
+        [halfLeft, bottomRight, bottomLeft] : patternShape === 'right-diagonal' ? [halfRight, bottomRight, bottomLeft] : patternShape === 'vertical' ? [halfLeft, halfRight, bottomRight, bottomLeft] : undefined
+
+    return { outlinePoints, patternPoints }
+}
+
+export const getPoints = (design: UnitDesign) => {
+    switch (design.shape) {
+        case "rectangle":
+            return getRectangularUnitPoints(design)
+        case "triangle":
+            return getTriangularPoints(design)
+    }
 }

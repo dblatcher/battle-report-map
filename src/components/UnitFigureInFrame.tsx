@@ -1,5 +1,5 @@
 import { UnitDesign } from "@/types"
-import { RectangularUnit } from "./RectangularUnit"
+import { UnitFigure } from "./UnitFigure"
 import { SvgFrame } from "./SvgFrame"
 import { BoxProps } from "@mui/material"
 
@@ -8,7 +8,7 @@ interface Props {
     boxProps?: BoxProps
 }
 
-export const RectangularUnitInFrame = ({ unit, boxProps = { sx: { width: '60px' } } }: Props) => {
+export const UnitFigureInFrame = ({ unit, boxProps = { sx: { width: '60px' } } }: Props) => {
     const { width, height, arrowSize = 2, } = unit
     return (
         <SvgFrame boxProps={boxProps} viewBox={{
@@ -17,7 +17,7 @@ export const RectangularUnitInFrame = ({ unit, boxProps = { sx: { width: '60px' 
             minX: -width / 2,
             minY: -height / 2
         }}>
-            <RectangularUnit unit={{
+            <UnitFigure unit={{
                 ...unit,
                 heading: 0,
                 x: 0,

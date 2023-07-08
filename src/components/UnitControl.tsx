@@ -1,6 +1,6 @@
 import { Position, Unit } from "@/types";
 import { Box, Button, ButtonGroup, Stack, Switch, Typography } from "@mui/material";
-import { RectangularUnitInFrame } from "./RectangularUnitInFrame";
+import { UnitFigureInFrame } from "./UnitFigureInFrame";
 import { _DEG, inDegrees } from "@/lib/uitl";
 
 type Props = {
@@ -25,7 +25,7 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
         <Box padding={1} borderColor={'primary.dark'} border={1}>
             <Typography>[{unit.x}, {unit.y}] {inDegrees(unit.heading ?? 0)?.toFixed(0)}°</Typography>
             <Stack direction={'row'} spacing={1} alignItems={'center'} marginBottom={1}  >
-                <RectangularUnitInFrame unit={unit} boxProps={{ flexBasis: 50 }} />
+                <UnitFigureInFrame unit={unit} boxProps={{ flexBasis: 50 }} />
                 <Stack direction={'row'}>
                     <Switch size="small" onChange={() => { select(activeIndex !== index) }} checked={activeIndex === index} />
                     <ButtonGroup>

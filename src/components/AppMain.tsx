@@ -5,7 +5,7 @@ import { Position, Unit, UnitDesign, ViewBox } from "@/types"
 import { Box, Button, Container, Dialog, DialogContent, Grid, Typography } from "@mui/material"
 import { useState } from "react"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
-import { RectangularUnit } from "./RectangularUnit"
+import { UnitFigure } from "./UnitFigure"
 import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
 import { FloodRect } from "./FloodRect"
@@ -51,7 +51,7 @@ export const AppMain = () => {
                         fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={viewBox}>
                         <FloodRect fill={background} viewBox={viewBox} />
                         {units.map((unit, index) => (
-                            <RectangularUnit
+                            <UnitFigure
                                 isActive={activeUnitIndex === index}
                                 key={index}
                                 unit={unit} />

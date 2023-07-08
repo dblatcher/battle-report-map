@@ -18,6 +18,7 @@ export type UnitDesign = {
     col1: string;
     col2: string;
     patternShape?: PatternShape;
+    shape: 'rectangle' | 'triangle';
 }
 
 export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'

@@ -1,5 +1,5 @@
 import { Point, rotate, translate } from "@/lib/geometry";
-import { getRectangularUnitPoints } from "@/lib/shapes";
+import { getPoints } from "@/lib/shapes";
 import { Unit } from "@/types";
 
 
@@ -8,10 +8,10 @@ type Props = { unit: Unit, isActive?: boolean }
 
 const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 
-export const RectangularUnit = ({ unit, isActive }: Props) => {
+export const UnitFigure = ({ unit, isActive }: Props) => {
     const { x, y, heading, col1, col2 } = unit
 
-    const { outlinePoints, patternPoints } = getRectangularUnitPoints(unit)
+    const { outlinePoints, patternPoints } = getPoints(unit)
 
     const outline = outlinePoints.map(rotate(heading))
         .map(translate(x, y))
