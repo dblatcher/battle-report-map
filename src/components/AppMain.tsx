@@ -51,9 +51,9 @@ export const AppMain = () => {
                         fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={viewBox}>
                         <FloodRect fill={background} viewBox={viewBox} />
                         {units.map((unit, index) => (
-                            <UnitFigure
+                            <UnitFigure key={index}
                                 isActive={activeUnitIndex === index}
-                                key={index}
+                                showMarkers
                                 unit={unit} />
                         ))}
                     </DownloadableSvgFrame>
@@ -75,6 +75,7 @@ export const AppMain = () => {
                             }}
                             move={(position) => { handleMove(position, index) }}
                             deleteUnit={() => { unitArray.deleteItem(index) }}
+                            setMarkers={(markers) => { unitArray.merge(index, markers) }}
                         />
                     ))}
                     <Box>

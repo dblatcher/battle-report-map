@@ -1,4 +1,4 @@
-import { Position, Unit } from "@/types";
+import { Markers, Position, Unit } from "@/types";
 import { Box, Button, ButtonGroup, Stack, Switch, Typography } from "@mui/material";
 import { UnitFigureInFrame } from "./UnitFigureInFrame";
 import { _DEG, inDegrees } from "@/lib/uitl";
@@ -10,9 +10,10 @@ type Props = {
     activeIndex?: number,
     select: { (on: boolean): void }
     deleteUnit: { (): void }
+    setMarkers: { (markers: Markers): void }
 }
 
-export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit }: Props) => {
+export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit, setMarkers }: Props) => {
 
     const clockwise = () => {
         move({ ...unit, heading: (unit.heading ?? 0) - 5 * _DEG })
@@ -35,6 +36,18 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
                 </Stack>
 
                 <Button variant="outlined" size="small" onClick={deleteUnit}>X</Button>
+                <ButtonGroup size="small">
+                    <Button onClick={() => {
+                        setMarkers({
+                            hits: 1 + (unit.hits ?? 0)
+                        })
+                    }}>hit+</Button>
+                    <Button onClick={() => {
+                        setMarkers({
+                            hits: -1 + (unit.hits ?? 0)
+                        })
+                    }}>hit-</Button>
+                </ButtonGroup>
             </Stack>
         </Box>
     )

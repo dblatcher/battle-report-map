@@ -10,12 +10,12 @@ interface Props {
 export const UnitDesigner = ({ confirm }: Props) => {
 
     const [unit, setUnit] = useState<UnitDesign>({
-        width: 20,
-        height: 20,
+        width: 40,
+        height: 40,
         patternShape: 'vertical',
         col1: '#0000FF',
         col2: '#FF0000',
-        shape: 'triangle',
+        shape: 'rectangle',
     })
 
     const changeUnitProperty = (property: keyof UnitDesign, value: string) => {

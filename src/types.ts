@@ -21,6 +21,10 @@ export type UnitDesign = {
     shape: 'rectangle' | 'triangle';
 }
 
+export type Markers = {
+    hits?: number;
+}
+
 export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
 
-export type Unit = Position & UnitDesign
+export type Unit = Position & UnitDesign & Markers

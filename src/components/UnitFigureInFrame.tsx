@@ -21,7 +21,7 @@ export const UnitFigureInFrame = ({ unit, boxProps = { sx: { width: '60px' } } }
                 ...unit,
                 heading: 0,
                 x: 0,
-                y: 2 * arrowSize
+                y: 2 * arrowSize,
             }} />
         </SvgFrame>
     )

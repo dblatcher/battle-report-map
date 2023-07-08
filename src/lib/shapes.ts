@@ -42,7 +42,7 @@ const getTriangularPoints = (design: UnitDesign) => {
     const front: Point = [0, - height / 2]
     const bottomRight: Point = [width / 2, + height / 2]
     const bottomLeft: Point = [- width / 2, + height / 2]
-    const xAtHalfWayUp = (height/2) / (height/(width/2))
+    const xAtHalfWayUp = (height / 2) / (height / (width / 2))
     const halfRight: Point = [xAtHalfWayUp, 0]
     const halfLeft: Point = [- xAtHalfWayUp, 0]
     const outlinePoints = [
@@ -64,3 +64,7 @@ export const getPoints = (design: UnitDesign) => {
             return getTriangularPoints(design)
     }
 }
+
+export const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
+
+export const scalePoint: { (scale: number): { (point: Point): Point } } = (scale) => (point) => ([point[0] * scale, point[1] * scale])
