@@ -9,7 +9,7 @@ type Props = { unit: Unit, isActive?: boolean }
 const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 
 export const RectangularUnit = ({ unit, isActive }: Props) => {
-    const { x, y, heading = 0, col1 = 'red', col2 = 'blue' } = unit
+    const { x, y, heading, col1, col2 } = unit
 
     const { outlinePoints, patternPoints } = getRectangularUnitPoints(unit)
 

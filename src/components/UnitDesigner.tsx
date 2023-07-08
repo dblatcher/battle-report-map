@@ -77,7 +77,7 @@ export const UnitDesigner = ({ confirm }: Props) => {
             </Grid>
             <Grid item xs={6} >
                 <SvgFrame>
-                    <RectangularUnit unit={{ ...unit, x: 50, y: 50 }} />
+                    <RectangularUnit unit={{ ...unit, x: 50, y: 50, heading: 0 }} />
                 </SvgFrame>
             </Grid>
         </Grid>

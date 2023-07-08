@@ -8,15 +8,15 @@ export type ViewBox = {
 export type Position = {
     x: number;
     y: number;
-    heading?: number;
+    heading: number;
 }
 
 export type UnitDesign = {
     width: number;
     height: number;
     arrowSize?: number;
-    col1?: string;
-    col2?: string;
+    col1: string;
+    col2: string;
     patternShape?: PatternShape;
 }
 
