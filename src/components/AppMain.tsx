@@ -9,12 +9,13 @@ import { UnitDesigner } from "./UnitDesigner"
 import { FloodRect } from "./FloodRect"
 import { BattleFieldDesigner } from "./BattleFieldDesigner"
 import { defaultBadges } from "@/lib/badges"
+import { useObjectState } from "@/lib/useObjectState"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
     const [battleFieldDesignerOpen, setBattleFieldDesignerOpen] = useState(true)
     const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
-    const [battleField, setBattleField] = useState<BattleField>({
+    const [battleField, { set: setBattleField, merge: mergeBattleField }] = useObjectState<BattleField>({
         viewBox: { width: 300, height: 200 },
         backgroundColor: '#44AA33'
     })
@@ -107,7 +108,9 @@ export const AppMain = () => {
                     <DialogContent>
                         <BattleFieldDesigner
                             battleField={battleField}
-                            setBattleField={setBattleField} />
+                            setBattleField={setBattleField}
+                            mergeBattleField={mergeBattleField}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => { setBattleFieldDesignerOpen(false) }}>close</Button>
