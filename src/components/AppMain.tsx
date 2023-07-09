@@ -13,13 +13,13 @@ import { defaultBadges } from "@/lib/badges"
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
     const [battleFieldDesignerOpen, setBattleFieldDesignerOpen] = useState(true)
-    const [badges, setBadges, badgeArry] = useArrayState<Badge>(defaultBadges)
+    const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
     const [battleField, setBattleField] = useState<BattleField>({
         viewBox: { width: 300, height: 200 },
         backgroundColor: '#44AA33'
     })
 
-    const [units, setUnits, unitArray] = useArrayState<Unit>([])
+    const [units, unitArray] = useArrayState<Unit>([])
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
 
     const handleConfirmDesign = (newUnit: UnitDesign) => {

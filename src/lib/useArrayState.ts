@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-export function useArrayState<T>(initialValue: T[]): [
+export function useArrayState<T extends object>(initialValue: T[]): [
     T[],
-    Dispatch<SetStateAction<T[]>>,
     {
         set: (index: number, newMember: T) => void;
         merge: (index: number, changes: Partial<T>) => void;
         push: (newMember: T) => void;
         deleteItem: (index: number) => void;
+        setArray: Dispatch<SetStateAction<T[]>>;
     }
 ] {
     const [array, setArray] = useState<T[]>(initialValue)
@@ -45,5 +45,5 @@ export function useArrayState<T>(initialValue: T[]): [
         ])
     }
 
-    return [array, setArray, { set, merge, push, deleteItem }]
+    return [array, { set, merge, push, deleteItem, setArray }]
 }
