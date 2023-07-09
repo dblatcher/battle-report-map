@@ -36,7 +36,9 @@ export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
                 translate(${x} ${y})
                 rotate (${inDegrees(-heading)})
                 translate(${-badge.width / 2} ${-badge.height / 2})
-                `} />
+                `} 
+                preserveAspectRatio="none"
+                />
             )}
             {showMarkers && <MarkersOnUnit unit={unit} />}
 

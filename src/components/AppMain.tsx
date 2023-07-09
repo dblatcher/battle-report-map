@@ -1,5 +1,3 @@
-'use client'
-
 import { useArrayState } from "@/lib/useArrayState"
 import { Position, Unit, UnitDesign, ViewBox } from "@/types"
 import { Box, Button, Container, Dialog, DialogContent, Grid, Typography } from "@mui/material"
@@ -84,7 +82,7 @@ export const AppMain = () => {
                 </Grid>
             </Grid>
 
-            <Dialog open={unitDesignerOpen} maxWidth="md">
+            <Dialog open={unitDesignerOpen} maxWidth="lg">
                 <DialogContent>
                     <UnitDesigner confirm={handleConfirmDesign} />
                 </DialogContent>
