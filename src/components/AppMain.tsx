@@ -1,5 +1,5 @@
 import { useArrayState } from "@/lib/useArrayState"
-import { Badge, Position, Unit, UnitDesign, ViewBox } from "@/types"
+import { Badge, BattleField, Position, Unit, UnitDesign, ViewBox } from "@/types"
 import { Box, Button, Container, Dialog, DialogContent, Grid, Typography } from "@mui/material"
 import { useState } from "react"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
@@ -7,16 +7,19 @@ import { UnitFigure } from "./UnitFigure"
 import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
 import { FloodRect } from "./FloodRect"
-import { FrameControl } from "./FrameControl"
+import { BattleFieldDesigner } from "./BattleFieldDesigner"
 import { defaultBadges } from "@/lib/badges"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
-    const [units, setUnits, unitArray] = useArrayState<Unit>([])
     const [badges, setBadges, badgeArry] = useArrayState<Badge>(defaultBadges)
-    const [viewBox, setViewBox] = useState<ViewBox>({ width: 300, height: 200 })
+    const [battleField, setBattleField] = useState<BattleField>({
+        viewBox: { width: 300, height: 200 },
+        backgroundColor: '#44AA33'
+    })
+    
+    const [units, setUnits, unitArray] = useArrayState<Unit>([])
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
-    const [background, setBackground] = useState<string>('#44AA33')
 
     const handleConfirmDesign = (newUnit: UnitDesign) => {
         setUnitDesignerOpen(false)
@@ -24,8 +27,8 @@ export const AppMain = () => {
         unitArray.push(
             {
                 ...newUnit,
-                x: viewBox.minX ?? 0,
-                y: viewBox.minY ?? 0,
+                x: battleField.viewBox.minX ?? 0,
+                y: battleField.viewBox.minY ?? 0,
                 heading: 0,
             }
         )
@@ -48,8 +51,8 @@ export const AppMain = () => {
                 <Grid item xs={8}>
                     <DownloadableSvgFrame
                         reportClick={handleFrameClick}
-                        fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={viewBox}>
-                        <FloodRect fill={background} viewBox={viewBox} />
+                        fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={battleField.viewBox}>
+                        <FloodRect fill={battleField.backgroundColor} viewBox={battleField.viewBox} />
                         {units.map((unit, index) => (
                             <UnitFigure key={index}
                                 isActive={activeUnitIndex === index}
@@ -59,11 +62,9 @@ export const AppMain = () => {
                     </DownloadableSvgFrame>
                 </Grid>
                 <Grid item xs={4} paddingX={1}>
-                    <FrameControl
-                        viewBox={viewBox}
-                        setViewBox={setViewBox}
-                        background={background}
-                        setBackground={setBackground} />
+                    <BattleFieldDesigner
+                        battleField={battleField}
+                        setBattleField={setBattleField} />
                     {units.map((unit, index) => (
                         <UnitControl
                             key={index}

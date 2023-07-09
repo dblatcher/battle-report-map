@@ -5,6 +5,11 @@ export type ViewBox = {
     height?: number
 }
 
+export type BattleField = {
+    viewBox: ViewBox;
+    backgroundColor: string;
+}
+
 export type Position = {
     x: number;
     y: number;
