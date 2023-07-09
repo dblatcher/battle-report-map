@@ -1,16 +1,15 @@
-import { badges } from "@/lib/badges"
-import { UnitDesign } from "@/types"
+import { Badge, UnitDesign } from "@/types"
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material"
-import Image from "next/image"
 import { ChangeEventHandler, useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 import { BadgePicker } from "./BadgePicker"
 
 interface Props {
-    confirm: { (design: UnitDesign): void }
+    confirm: { (design: UnitDesign): void };
+    badges: Badge[];
 }
 
-export const UnitDesigner = ({ confirm }: Props) => {
+export const UnitDesigner = ({ confirm, badges }: Props) => {
 
     const [unit, setUnit] = useState<UnitDesign>({
         width: 40,
@@ -109,7 +108,7 @@ export const UnitDesigner = ({ confirm }: Props) => {
                     <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
                 </Stack>
 
-                <BadgePicker unit={unit} setUnit={setUnit} />
+                <BadgePicker unit={unit} setUnit={setUnit} badges={badges} />
 
                 <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
             </Grid>

@@ -1,4 +1,3 @@
-import { badges } from "@/lib/badges"
 import { Badge, UnitDesign } from "@/types"
 import { Box, Button, Stack, TextField, Typography } from "@mui/material"
 import Image from "next/image"
@@ -7,12 +6,13 @@ import { ChangeEventHandler } from "react";
 interface Props {
     unit: UnitDesign;
     setUnit: { (design: UnitDesign): void }
+    badges: Badge[];
 }
 
-export const BadgePicker = ({ unit, setUnit }: Props) => {
+export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
 
     const { badge: currentBadge } = unit
-    const setBadge = (badge: Badge) => setUnit({ ...unit, badge: { ...badge } })
+    const setBadge = (badge: Badge | undefined) => setUnit({ ...unit, badge: badge ? { ...badge } : undefined })
 
 
     const changeBadgeProperty = (property: keyof Badge, value: string) => {
@@ -34,6 +34,11 @@ export const BadgePicker = ({ unit, setUnit }: Props) => {
         <Box>
             <Typography variant="caption">badge</Typography>
             <Stack direction={'row'}>
+                <Button
+                    onClick={() => { setBadge(undefined) }}
+                >
+                    X
+                </Button>
                 {badges.map((badge, index) => (
                     <Button key={index}
                         onClick={() => { setUnit({ ...unit, badge: { ...badge } }) }}
@@ -45,19 +50,20 @@ export const BadgePicker = ({ unit, setUnit }: Props) => {
                     </Button>
                 ))}
             </Stack>
-            <Stack direction={'row'}>
-                <Stack direction={'row'}>
+
+            <Stack direction={'row'} minHeight={40}>
+                {unit.badge && <>
                     <TextField label='width'
                         type="number" size="small"
-                        value={unit.badge?.width}
+                        value={unit.badge.width}
                         onChange={makeHandler('width')}
                         inputProps={{ step: 1 }} />
                     <TextField label='height' size="small"
                         type="number"
-                        value={unit.badge?.height}
+                        value={unit.badge.height}
                         onChange={makeHandler('height')}
                         inputProps={{ step: 1 }} />
-                </Stack>
+                </>}
             </Stack>
         </Box>
     )

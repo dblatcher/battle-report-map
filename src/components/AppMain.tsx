@@ -1,5 +1,5 @@
 import { useArrayState } from "@/lib/useArrayState"
-import { Position, Unit, UnitDesign, ViewBox } from "@/types"
+import { Badge, Position, Unit, UnitDesign, ViewBox } from "@/types"
 import { Box, Button, Container, Dialog, DialogContent, Grid, Typography } from "@mui/material"
 import { useState } from "react"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
@@ -8,10 +8,12 @@ import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
 import { FloodRect } from "./FloodRect"
 import { FrameControl } from "./FrameControl"
+import { defaultBadges } from "@/lib/badges"
 
 export const AppMain = () => {
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
     const [units, setUnits, unitArray] = useArrayState<Unit>([])
+    const [badges, setBadges, badgeArry] = useArrayState<Badge>(defaultBadges)
     const [viewBox, setViewBox] = useState<ViewBox>({ width: 300, height: 200 })
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
     const [background, setBackground] = useState<string>('#44AA33')
@@ -84,7 +86,7 @@ export const AppMain = () => {
 
             <Dialog open={unitDesignerOpen} maxWidth="lg">
                 <DialogContent>
-                    <UnitDesigner confirm={handleConfirmDesign} />
+                    <UnitDesigner confirm={handleConfirmDesign} badges={badges}/>
                 </DialogContent>
             </Dialog>
         </Container>

@@ -1,6 +1,6 @@
 import { Badge } from "@/types";
 
-export const badges: Badge[] = [
+export const defaultBadges: Badge[] = [
     {
         href: '/wings.png',
         width: 20,
