@@ -1,6 +1,6 @@
 import { useArrayState } from "@/lib/useArrayState"
 import { Badge, BattleField, Position, Unit, UnitDesign } from "@/types"
-import { AppBar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, Container, Dialog, DialogActions, DialogContent, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
 import { UnitFigure } from "./UnitFigure"
@@ -10,10 +10,11 @@ import { FloodRect } from "./FloodRect"
 import { BattleFieldDesigner } from "./BattleFieldDesigner"
 import { defaultBadges } from "@/lib/badges"
 import { useObjectState } from "@/lib/useObjectState"
+import { a11yProps, CustomTabPanel } from "./tab-panels"
 
 export const AppMain = () => {
+    const [tabOpen, setTabOpen] = useState(0)
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
-    const [battleFieldDesignerOpen, setBattleFieldDesignerOpen] = useState(true)
     const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
     const [battleField, { set: setBattleField, merge: mergeBattleField }] = useObjectState<BattleField>({
         viewBox: { width: 300, height: 200 },
@@ -53,8 +54,6 @@ export const AppMain = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Battle map
                     </Typography>
-                    <Button color="inherit" onClick={() => { setBattleFieldDesignerOpen(true) }}>battle field</Button>
-                    <Button color="inherit" onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
                 </Toolbar>
             </AppBar>
             <Container maxWidth={'lg'} sx={{ marginTop: 2 }}>
@@ -72,48 +71,51 @@ export const AppMain = () => {
                             ))}
                         </DownloadableSvgFrame>
                     </Grid>
+
                     <Grid item xs={4} paddingX={1}>
+                        <Tabs value={tabOpen} onChange={(_, value) => setTabOpen(value)}>
+                            <Tab label="Terrain" {...a11yProps(0)} />
+                            <Tab label="Units" {...a11yProps(1)} />
+                        </Tabs>
 
-                        {units.map((unit, index) => (
-                            <UnitControl
-                                key={index}
-                                unit={unit}
-                                index={index}
-                                activeIndex={activeUnitIndex}
-                                select={(on) => {
-                                    setActiveUnitIndex(on ? index : undefined)
-                                }}
-                                move={(position) => { handleMove(position, index) }}
-                                deleteUnit={() => { unitArray.deleteItem(index) }}
-                                setMarkers={(markers) => { unitArray.merge(index, markers) }}
+                        <CustomTabPanel index={0} value={tabOpen}>
+                            <BattleFieldDesigner
+                                battleField={battleField}
+                                setBattleField={setBattleField}
+                                mergeBattleField={mergeBattleField}
                             />
-                        ))}
+                        </CustomTabPanel>
+                        <CustomTabPanel index={1} value={tabOpen}>
+                            {units.map((unit, index) => (
+                                <UnitControl
+                                    key={index}
+                                    unit={unit}
+                                    index={index}
+                                    activeIndex={activeUnitIndex}
+                                    select={(on) => {
+                                        setActiveUnitIndex(on ? index : undefined)
+                                    }}
+                                    move={(position) => { handleMove(position, index) }}
+                                    deleteUnit={() => { unitArray.deleteItem(index) }}
+                                    setMarkers={(markers) => { unitArray.merge(index, markers) }}
+                                />
+                            ))}
 
-                        <Button fullWidth
-                            sx={{ marginTop: 1 }}
-                            variant={'outlined'}
-                            onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
+                            <Button fullWidth
+                                sx={{ marginTop: 1 }}
+                                variant={'outlined'}
+                                onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
+                        </CustomTabPanel>
+
                     </Grid>
                 </Grid>
+
                 <Dialog open={unitDesignerOpen} maxWidth="lg">
                     <DialogContent>
                         <UnitDesigner confirm={handleConfirmDesign} badges={badges} />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => { setUnitDesignerOpen(false) }}>close</Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog open={battleFieldDesignerOpen} maxWidth="lg" onClose={() => { setBattleFieldDesignerOpen(false) }}>
-                    <DialogTitle>Battle Field</DialogTitle>
-                    <DialogContent>
-                        <BattleFieldDesigner
-                            battleField={battleField}
-                            setBattleField={setBattleField}
-                            mergeBattleField={mergeBattleField}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => { setBattleFieldDesignerOpen(false) }}>close</Button>
                     </DialogActions>
                 </Dialog>
             </Container>
