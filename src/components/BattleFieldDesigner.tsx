@@ -1,29 +1,62 @@
-import { BattleField } from "@/types"
-import { Stack, TextField } from "@mui/material"
+import { ArrayStateInterface } from "@/lib/useArrayState"
+import { BattleField, TerrainPiece } from "@/types"
+import { Box, Button, Stack, TextField } from "@mui/material"
+import { TerrainDesigner } from "./TerrainDesigner"
 
 
 interface Props {
     battleField: BattleField
     setBattleField: { (battleField: BattleField): void }
     mergeBattleField: { (battleField: Partial<BattleField>): void }
+    terrainPieces: TerrainPiece[],
+    terrainPieceArray: ArrayStateInterface<TerrainPiece>
+    activeTerrainPieceIndex?: number
+    setActiveTerrainPieceIndex: { (index: number | undefined): void }
 }
 
-export const BattleFieldDesigner = ({ battleField, mergeBattleField }: Props) => {
+export const BattleFieldDesigner = ({ battleField, mergeBattleField, terrainPieces, terrainPieceArray, activeTerrainPieceIndex, setActiveTerrainPieceIndex }: Props) => {
+
+    const mergeTerrainPiece = (index: number) => (changes: Partial<TerrainPiece>) => terrainPieceArray.merge(index, changes)
+    const toggleActive = (index: number) => () => setActiveTerrainPieceIndex(activeTerrainPieceIndex === index ? undefined : index)
+
+    const addTerrain = () => {
+        setActiveTerrainPieceIndex(terrainPieces.length)
+        terrainPieceArray.push({
+            href: '/tree.png',
+            width: 40, height: 40,
+            x: 0, y: 0,
+            heading: 0,
+        })
+    }
 
     return (
-        <Stack direction={'row'} marginTop={2}>
-            <TextField label='height' type="number"
-                value={battleField.viewBox.height}
-                onChange={ev => { mergeBattleField({ viewBox: { ...battleField.viewBox, height: Number(ev.target.value) } }) }}
-            />
-            <TextField label='width' type="number"
-                value={battleField.viewBox.width}
-                onChange={ev => { mergeBattleField({ viewBox: { ...battleField.viewBox, width: Number(ev.target.value) } }) }}
-            />
-            <TextField sx={{ minWidth: 100 }} label='background' type="color"
-                value={battleField.backgroundColor}
-                onChange={ev => { mergeBattleField({ backgroundColor: ev.target.value }) }}
-            />
-        </Stack>
+        <Box>
+            <Stack direction={'row'} marginTop={2}>
+                <TextField label='height' type="number"
+                    value={battleField.viewBox.height}
+                    onChange={ev => { mergeBattleField({ viewBox: { ...battleField.viewBox, height: Number(ev.target.value) } }) }}
+                />
+                <TextField label='width' type="number"
+                    value={battleField.viewBox.width}
+                    onChange={ev => { mergeBattleField({ viewBox: { ...battleField.viewBox, width: Number(ev.target.value) } }) }}
+                />
+                <TextField sx={{ minWidth: 100 }} label='background' type="color"
+                    value={battleField.backgroundColor}
+                    onChange={ev => { mergeBattleField({ backgroundColor: ev.target.value }) }}
+                />
+            </Stack>
+
+            <Stack marginTop={2}>
+                {terrainPieces.map((piece, index) => (
+                    <TerrainDesigner key={index}
+                        terrainPiece={piece}
+                        merge={mergeTerrainPiece(index)}
+                        isActive={index === activeTerrainPieceIndex}
+                        toggle={toggleActive(index)}
+                    />
+                ))}
+            </Stack>
+            <Button variant="outlined" onClick={addTerrain} >New Terrain</Button>
+        </Box>
     )
 }

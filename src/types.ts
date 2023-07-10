@@ -10,6 +10,12 @@ export type BattleField = {
     backgroundColor: string;
 }
 
+export type TerrainPiece = Position & {
+    href: string;
+    width: number
+    height: number
+}
+
 export type Position = {
     x: number;
     y: number;

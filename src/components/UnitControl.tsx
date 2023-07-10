@@ -2,6 +2,7 @@ import { Markers, Position, Unit } from "@/types";
 import { Box, Button, ButtonGroup, Stack, Switch, Typography } from "@mui/material";
 import { UnitFigureInFrame } from "./UnitFigureInFrame";
 import { _DEG, inDegrees } from "@/lib/uitl";
+import { RotationButtons } from "./RotationButtons";
 
 type Props = {
     unit: Unit,
@@ -15,11 +16,8 @@ type Props = {
 
 export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit, setMarkers }: Props) => {
 
-    const clockwise = () => {
-        move({ ...unit, heading: (unit.heading ?? 0) - 5 * _DEG })
-    }
-    const antiClockwise = () => {
-        move({ ...unit, heading: (unit.heading ?? 0) + 5 * _DEG })
+    const setRotation = (value: number) => {
+        move({ ...unit, heading: value })
     }
 
     return (
@@ -29,10 +27,7 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
                 <UnitFigureInFrame unit={unit} boxProps={{ flexBasis: 50 }} />
                 <Stack direction={'row'}>
                     <Switch size="small" onChange={() => { select(activeIndex !== index) }} checked={activeIndex === index} />
-                    <ButtonGroup>
-                        <Button size="small" onClick={antiClockwise}>↺</Button>
-                        <Button size="small" onClick={clockwise}>↻</Button>
-                    </ButtonGroup>
+                    <RotationButtons value={unit.heading} setValue={setRotation} />
                 </Stack>
 
                 <Button variant="outlined" size="small" onClick={deleteUnit}>X</Button>

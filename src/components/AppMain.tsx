@@ -1,5 +1,5 @@
 import { useArrayState } from "@/lib/useArrayState"
-import { Badge, BattleField, Position, Unit, UnitDesign } from "@/types"
+import { Badge, BattleField, Position, TerrainPiece, Unit, UnitDesign } from "@/types"
 import { AppBar, Box, Button, Container, Dialog, DialogActions, DialogContent, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
@@ -11,18 +11,26 @@ import { BattleFieldDesigner } from "./BattleFieldDesigner"
 import { defaultBadges } from "@/lib/badges"
 import { useObjectState } from "@/lib/useObjectState"
 import { a11yProps, CustomTabPanel } from "./tab-panels"
+import { TerrainFigure } from "./TerrainFigure"
+
+enum PanelNumbers {
+    Terrain,
+    Units
+}
 
 export const AppMain = () => {
-    const [tabOpen, setTabOpen] = useState(0)
+    const [tabOpen, setTabOpen] = useState<PanelNumbers>(0)
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
     const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
     const [battleField, { set: setBattleField, merge: mergeBattleField }] = useObjectState<BattleField>({
         viewBox: { width: 300, height: 200 },
         backgroundColor: '#44AA33'
     })
+    const [terrainPieces, terrainPieceArray] = useArrayState<TerrainPiece>([])
 
     const [units, unitArray] = useArrayState<Unit>([])
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
+    const [activeTerrainPieceIndex, setActiveTerrainPieceIndex] = useState<number | undefined>(undefined)
 
     const handleConfirmDesign = (newUnit: UnitDesign) => {
         setUnitDesignerOpen(false)
@@ -42,8 +50,17 @@ export const AppMain = () => {
     }
 
     const handleFrameClick = (coordinates: { x: number, y: number }) => {
-        if (typeof activeUnitIndex === 'number') {
-            unitArray.merge(activeUnitIndex, coordinates)
+        switch (tabOpen) {
+            case PanelNumbers.Terrain:
+                if (typeof activeTerrainPieceIndex === 'number') {
+                    terrainPieceArray.merge(activeTerrainPieceIndex, coordinates)
+                }
+                break
+            case PanelNumbers.Units:
+                if (typeof activeUnitIndex === 'number') {
+                    unitArray.merge(activeUnitIndex, coordinates)
+                }
+                break
         }
     }
 
@@ -69,6 +86,10 @@ export const AppMain = () => {
                                     showMarkers
                                     unit={unit} />
                             ))}
+
+                            {terrainPieces.map((piece, index) => (
+                                <TerrainFigure terrainPiece={piece} key={index} />
+                            ))}
                         </DownloadableSvgFrame>
                     </Grid>
 
@@ -78,14 +99,18 @@ export const AppMain = () => {
                             <Tab label="Units" {...a11yProps(1)} />
                         </Tabs>
 
-                        <CustomTabPanel index={0} value={tabOpen}>
+                        <CustomTabPanel index={PanelNumbers.Terrain} value={tabOpen}>
                             <BattleFieldDesigner
-                                battleField={battleField}
-                                setBattleField={setBattleField}
-                                mergeBattleField={mergeBattleField}
+                                {...{
+                                    terrainPieces, terrainPieceArray,
+                                    mergeBattleField, setBattleField,
+                                    battleField,
+                                    activeTerrainPieceIndex, setActiveTerrainPieceIndex
+                                }}
                             />
                         </CustomTabPanel>
-                        <CustomTabPanel index={1} value={tabOpen}>
+
+                        <CustomTabPanel index={PanelNumbers.Units} value={tabOpen}>
                             {units.map((unit, index) => (
                                 <UnitControl
                                     key={index}

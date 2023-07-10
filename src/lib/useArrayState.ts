@@ -1,14 +1,16 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
+export type ArrayStateInterface<T> = {
+    set: (index: number, newMember: T) => void;
+    merge: (index: number, changes: Partial<T>) => void;
+    push: (newMember: T) => void;
+    deleteItem: (index: number) => void;
+    setArray: Dispatch<SetStateAction<T[]>>;
+}
+
 export function useArrayState<T extends object>(initialValue: T[]): [
     T[],
-    {
-        set: (index: number, newMember: T) => void;
-        merge: (index: number, changes: Partial<T>) => void;
-        push: (newMember: T) => void;
-        deleteItem: (index: number) => void;
-        setArray: Dispatch<SetStateAction<T[]>>;
-    }
+    ArrayStateInterface<T>,
 ] {
     const [array, setArray] = useState<T[]>(initialValue)
 
