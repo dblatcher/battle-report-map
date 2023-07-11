@@ -2,6 +2,7 @@ import { ArrayStateInterface } from "@/lib/useArrayState"
 import { BattleField, TerrainPiece } from "@/types"
 import { Box, Button, Stack, TextField } from "@mui/material"
 import { TerrainDesigner } from "./TerrainDesigner"
+import { terrainImages } from "@/lib/terrainAssets"
 
 
 interface Props {
@@ -22,8 +23,7 @@ export const BattleFieldDesigner = ({ battleField, mergeBattleField, terrainPiec
     const addTerrain = () => {
         setActiveTerrainPieceIndex(terrainPieces.length)
         terrainPieceArray.push({
-            href: '/tree.png',
-            width: 40, height: 40,
+           ...terrainImages[1],
             x: 0, y: 0,
             heading: 0,
         })

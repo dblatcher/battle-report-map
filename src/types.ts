@@ -22,12 +22,14 @@ export type Position = {
     heading: number;
 }
 
-export type Badge = {
+export type ImageAsset = {
     href: string;
     description: string;
     height: number;
     width: number;
 }
+export type Badge = ImageAsset
+export type TerrainImage = ImageAsset
 
 export type UnitDesign = {
     width: number;
