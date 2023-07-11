@@ -1,8 +1,9 @@
 import { ImageAsset, TerrainPiece } from "@/types";
-import { Box, Button, Checkbox, Dialog, DialogContent, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from "@mui/material";
 import { RotationButtons } from "./RotationButtons";
 import { useState } from "react";
 import { terrainImages } from "@/lib/terrainAssets";
+import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
 
 
 type Props = {
@@ -15,7 +16,7 @@ type Props = {
 
 export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props) => {
     const [imageDialogOpen, setImageDialogOpen] = useState(false)
-    const { x, y, heading, href, width, height, aboveUnits = false } = terrainPiece
+    const { x, y, heading, width, height, aboveUnits = false } = terrainPiece
 
     const pickImage = (image: ImageAsset) => {
         merge({ ...image })
@@ -26,7 +27,9 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
         <Box padding={1} borderColor={'primary.dark'} border={1}>
             <Stack marginTop={1} direction='row' spacing={1}>
                 <Switch checked={isActive} onChange={toggle} />
-                <Button variant="contained" onClick={() => setImageDialogOpen(true)}>{href}</Button>
+                <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>
+                    <TerrainPieceInFrame terrainPiece={terrainPiece} />
+                </Button>
                 <Typography variant="caption">[{x},{y}]</Typography>
             </Stack>
             <Stack marginTop={1} direction='row'>
@@ -56,13 +59,22 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
             </Stack>
 
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
+                <DialogTitle>Pick Terrain Image</DialogTitle>
                 <DialogContent>
                     <Grid container minWidth={'lg'}>
                         {terrainImages.map((image, index) => (
-                            <Grid item xs={3} key={index}>
+                            <Grid item xs={3} key={index} display={'flex'}>
                                 <Button variant="outlined"
                                     onClick={() => pickImage(image)}>
-                                    {image.href}
+                                    <TerrainPieceInFrame
+                                        terrainPiece={{
+                                            height: 50,
+                                            width: 50 * image.width / image.height,
+                                            href: image.href,
+                                            x: 0, y: 0,
+                                            heading: 0
+                                        }}
+                                    />
                                 </Button>
                             </Grid>
                         ))}
