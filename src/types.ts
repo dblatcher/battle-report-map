@@ -14,6 +14,7 @@ export type TerrainPiece = Position & {
     href: string;
     width: number
     height: number
+    aboveUnits?: boolean
 }
 
 export type Position = {

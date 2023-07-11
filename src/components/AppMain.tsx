@@ -80,6 +80,11 @@ export const AppMain = () => {
                             reportClick={handleFrameClick}
                             fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={battleField.viewBox}>
                             <FloodRect fill={battleField.backgroundColor} viewBox={battleField.viewBox} />
+
+                            {terrainPieces.filter(piece => !piece.aboveUnits).map((piece, index) => (
+                                <TerrainFigure terrainPiece={piece} key={index} />
+                            ))}
+
                             {units.map((unit, index) => (
                                 <UnitFigure key={index}
                                     isActive={activeUnitIndex === index}
@@ -87,7 +92,7 @@ export const AppMain = () => {
                                     unit={unit} />
                             ))}
 
-                            {terrainPieces.map((piece, index) => (
+                            {terrainPieces.filter(piece => piece.aboveUnits).map((piece, index) => (
                                 <TerrainFigure terrainPiece={piece} key={index} />
                             ))}
                         </DownloadableSvgFrame>

@@ -1,5 +1,5 @@
 import { ImageAsset, TerrainPiece } from "@/types";
-import { Box, Button, Dialog, DialogContent, Grid, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogContent, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from "@mui/material";
 import { RotationButtons } from "./RotationButtons";
 import { useState } from "react";
 import { terrainImages } from "@/lib/terrainAssets";
@@ -15,7 +15,7 @@ type Props = {
 
 export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props) => {
     const [imageDialogOpen, setImageDialogOpen] = useState(false)
-    const { x, y, heading, href, width, height } = terrainPiece
+    const { x, y, heading, href, width, height, aboveUnits = false } = terrainPiece
 
     const pickImage = (image: ImageAsset) => {
         merge({ ...image })
@@ -42,7 +42,18 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
                     inputProps={{ step: 5 }} />
             </Stack>
 
-            <RotationButtons value={heading} setValue={(value) => merge({ heading: value })} showValue />
+            <Stack marginTop={1} direction='row' justifyContent={'space-between'}>
+                <div>
+                    <RotationButtons value={heading} setValue={(value) => merge({ heading: value })} showValue />
+                </div>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            value={aboveUnits}
+                            onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
+                        />}
+                    label="Above" />
+            </Stack>
 
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
                 <DialogContent>
@@ -51,7 +62,7 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
                             <Grid item xs={3} key={index}>
                                 <Button variant="outlined"
                                     onClick={() => pickImage(image)}>
-                                        {image.href}
+                                    {image.href}
                                 </Button>
                             </Grid>
                         ))}
