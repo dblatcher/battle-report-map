@@ -23,7 +23,7 @@ export const BattleFieldDesigner = ({ battleField, mergeBattleField, terrainPiec
     const addTerrain = () => {
         setActiveTerrainPieceIndex(terrainPieces.length)
         terrainPieceArray.push({
-           ...terrainImages[1],
+            ...terrainImages[1],
             x: 0, y: 0,
             heading: 0,
         })
@@ -56,7 +56,7 @@ export const BattleFieldDesigner = ({ battleField, mergeBattleField, terrainPiec
                     />
                 ))}
             </Stack>
-            <Button variant="outlined" onClick={addTerrain} >New Terrain</Button>
+            <Button sx={{ marginTop: 1 }} variant="outlined" fullWidth onClick={addTerrain}>Add Terrain</Button>
         </Box>
     )
 }

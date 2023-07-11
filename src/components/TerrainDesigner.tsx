@@ -24,40 +24,47 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
     }
 
     return (
-        <Box padding={1} borderColor={'primary.dark'} border={1}>
-            <Stack marginTop={1} direction='row' spacing={1}>
-                <Switch checked={isActive} onChange={toggle} />
-                <Button variant="outlined" onClick={() => setImageDialogOpen(true)}>
-                    <TerrainPieceInFrame terrainPiece={terrainPiece} />
-                </Button>
-                <Typography variant="caption">[{x},{y}]</Typography>
-            </Stack>
-            <Stack marginTop={1} direction='row'>
-                <TextField label='width' size="small"
-                    type="number"
-                    value={width}
-                    onChange={(event) => { merge({ width: Number(event.target.value) }) }}
-                    inputProps={{ step: 5 }} />
-                <TextField label='height' size="small"
-                    type="number"
-                    value={height}
-                    onChange={(event) => { merge({ height: Number(event.target.value) }) }}
-                    inputProps={{ step: 5 }} />
-            </Stack>
+        <>
+            <Box padding={1} borderColor={'primary.dark'} border={1}>
+                <Stack marginTop={1} direction='row' spacing={1}>
+                    <Switch checked={isActive} onChange={toggle} />
+                    <Stack marginTop={1} direction='row'>
+                        <TextField label='width' size="small"
+                            type="number"
+                            value={width}
+                            onChange={(event) => { merge({ width: Number(event.target.value) }) }}
+                            inputProps={{ step: 5 }} />
+                        <TextField label='height' size="small"
+                            type="number"
+                            value={height}
+                            onChange={(event) => { merge({ height: Number(event.target.value) }) }}
+                            inputProps={{ step: 5 }} />
+                    </Stack>
+                </Stack>
 
-            <Stack marginTop={1} direction='row' justifyContent={'space-between'}>
-                <div>
-                    <RotationButtons value={heading} setValue={(value) => merge({ heading: value })} showValue />
-                </div>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            value={aboveUnits}
-                            onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
-                        />}
-                    label="Above" />
-            </Stack>
+                <Stack direction={'row'} spacing={1}>
+                    <Button variant="outlined" onClick={() => setImageDialogOpen(true)} sx={{ padding: 0 }}>
+                        <TerrainPieceInFrame 
+                            terrainPiece={terrainPiece} 
+                            boxProps={{ minHeight: 50, minWidth: 50, display: 'flex', alignItems: 'center' }} 
+                        />
+                    </Button>
 
+                    <Stack marginTop={1} direction='row' justifyContent={'space-between'} alignItems={'center'} spacing={1}>
+                        <div>
+                            <RotationButtons value={heading} setValue={(value) => merge({ heading: value })} showValue />
+                        </div>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    size="small"
+                                    value={aboveUnits}
+                                    onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
+                                />}
+                            label="Above" />
+                    </Stack>
+                </Stack>
+            </Box>
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
                 <DialogTitle>Pick Terrain Image</DialogTitle>
                 <DialogContent>
@@ -81,6 +88,6 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
                     </Grid>
                 </DialogContent>
             </Dialog>
-        </Box>
+        </>
     )
 }
