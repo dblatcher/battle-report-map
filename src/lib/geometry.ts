@@ -1,6 +1,6 @@
 function getVectorX(magnitude: number, direction: number) { return magnitude * Math.sin(direction) }
 function getVectorY(magnitude: number, direction: number) { return magnitude * Math.cos(direction) }
-function getXYVector(magnitude: number, direction: number) { return { x: getVectorX(magnitude, direction), y: getVectorY(magnitude, direction) } }
+export function getXYVector(magnitude: number, direction: number) { return { x: getVectorX(magnitude, direction), y: getVectorY(magnitude, direction) } }
 
 /**
  * Calculate the magnitude of an [x,y] vector, using pythagoras' theorum

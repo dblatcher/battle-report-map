@@ -1,18 +1,16 @@
-import { Point, rotate, translate } from "@/lib/geometry";
-import { getPoints } from "@/lib/shapes";
+import { Point, getXYVector, rotate, translate } from "@/lib/geometry";
+import { getCirclePaths, getPoints, pointToString } from "@/lib/shapes";
 import { Unit } from "@/types";
 import { MarkersOnUnit } from "./Markers";
-import { inDegrees } from "@/lib/uitl";
+import { inDegrees, inRads } from "@/lib/uitl";
 
 
 type Props = { unit: Unit, isActive?: boolean, showMarkers?: boolean }
 
 
-const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
+const PolygonDesign = ({ unit }: { unit: Unit }) => {
 
-export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
-    const { x, y, heading, col1, col2, badge } = unit
-
+    const { x, y, heading, col1, col2 } = unit
     const { outlinePoints, patternPoints } = getPoints(unit)
 
     const outline = outlinePoints.map(rotate(heading))
@@ -25,19 +23,41 @@ export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
         .map(pointToString)
         .join(" ")
 
+    return (<>
+        <polygon points={outline} fill={col1} stroke="none" />
+        {pattern && <polygon points={pattern} fill={col2} stroke="none" />}
+        <polygon points={outline} fill="none" stroke="black" />
+    </>
+    )
+}
+
+const CircleDesign = ({ unit }: { unit: Unit }) => {
+    const { col1, col2 } = unit
+    const { outlinePath, patternPath } = getCirclePaths(unit)
+
+    return (<>
+        <path d={outlinePath} fill={col1} />
+        {patternPath && <path d={patternPath} fill={col2} />}
+        <path d={outlinePath} stroke={'black'} fill="none" />
+    </>)
+}
+
+export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
+    const { x, y, heading, badge, shape } = unit
+
+
     return (
         <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}>
-            <polygon points={outline} fill={col1} stroke="none" />
-            {pattern && <polygon points={pattern} fill={col2} stroke="none" />}
-            <polygon points={outline} fill="none" stroke="black" />
+
+            {shape === 'circle' ? <CircleDesign unit={unit} /> : <PolygonDesign unit={unit} />}
 
             {badge && (
                 <image {...badge} transform={`
                 translate(${x} ${y})
                 rotate (${inDegrees(-heading)})
                 translate(${-badge.width / 2} ${-badge.height / 2})
-                `} 
-                preserveAspectRatio="none"
+                `}
+                    preserveAspectRatio="none"
                 />
             )}
             {showMarkers && <MarkersOnUnit unit={unit} />}

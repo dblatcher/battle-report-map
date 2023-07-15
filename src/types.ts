@@ -39,7 +39,7 @@ export type UnitDesign = {
     col1: string;
     col2: string;
     patternShape?: PatternShape;
-    shape: 'rectangle' | 'triangle';
+    shape: 'rectangle' | 'triangle' |'circle';
     badge?: Badge
 }
 

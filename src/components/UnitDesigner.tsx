@@ -47,6 +47,7 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
                 break
             case "shape":
                 switch (value) {
+                    case 'circle':
                     case 'triangle':
                     case 'rectangle':
                         setUnit({ ...unit, [property]: value })
@@ -100,6 +101,7 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
                         >
                             <MenuItem value={'rectangle'}>rectangle</MenuItem>
                             <MenuItem value={'triangle'}>triangle</MenuItem>
+                            <MenuItem value={'circle'}>circle</MenuItem>
                         </Select>
                     </FormControl>
                 </Stack>
