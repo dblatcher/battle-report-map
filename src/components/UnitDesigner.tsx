@@ -1,5 +1,5 @@
 import { Badge, UnitDesign } from "@/types"
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material"
+import { Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material"
 import { ChangeEventHandler, useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 import { BadgePicker } from "./BadgePicker"
@@ -105,13 +105,26 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
                         </Select>
                     </FormControl>
                 </Stack>
+
                 <Stack direction={'row'}>
                     <TextField sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
                     <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
+                    {unit.shape === 'circle' && (
+                        <FormControlLabel
+                            sx={{ padding: 1 }}
+                            label="wings"
+                            control={
+                                <Switch checked={unit.wings} onChange={(e) => {
+                                    setUnit({
+                                        ...unit,
+                                        wings: e.target.checked
+                                    })
+                                }} />}
+                        />
+                    )}
                 </Stack>
 
                 <BadgePicker unit={unit} setUnit={setUnit} badges={badges} />
-
                 <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
             </Grid>
             <Grid item xs={4} display={'flex'} justifyContent={'flex-end'}>

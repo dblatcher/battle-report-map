@@ -39,7 +39,7 @@ const CircleDesign = ({ unit }: { unit: Unit }) => {
     return (<>
         {wingPath && <>
             <path d={wingPath} fill="white" />
-            <path d={wingPath} stroke={'black'} fill="none" />
+            <path d={wingPath} stroke={'black'} fill="none" strokeWidth={.375} />
         </>}
         <path d={outlinePath} fill={col1} />
         {patternPath && <path d={patternPath} fill={col2} />}

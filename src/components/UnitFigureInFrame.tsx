@@ -12,10 +12,10 @@ export const UnitFigureInFrame = ({ unit, boxProps = { sx: { width: '60px' } } }
     const { width, height, arrowSize = 2, } = unit
     return (
         <SvgFrame boxProps={boxProps} viewBox={{
-            width: width,
+            width: width*1.5,
             height: height + 2 * arrowSize,
-            minX: -width / 2,
-            minY: -height / 2
+            minX: -width * .75,
+            minY: -height * .5
         }}>
             <UnitFigure unit={{
                 ...unit,
