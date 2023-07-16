@@ -1,8 +1,8 @@
-import { Point, getXYVector, rotate, translate } from "@/lib/geometry";
-import { getCirclePaths, getPoints, getWingPaths, pointToString } from "@/lib/shapes";
+import { rotate, translate } from "@/lib/geometry";
+import { getCirclePaths, getPoints, getWingPath, pointToString } from "@/lib/shapes";
+import { inDegrees } from "@/lib/uitl";
 import { Unit } from "@/types";
 import { MarkersOnUnit } from "./Markers";
-import { inDegrees, inRads } from "@/lib/uitl";
 
 
 type Props = { unit: Unit, isActive?: boolean, showMarkers?: boolean }
@@ -34,20 +34,16 @@ const PolygonDesign = ({ unit }: { unit: Unit }) => {
 const CircleDesign = ({ unit }: { unit: Unit }) => {
     const { col1, col2, wings } = unit
     const { outlinePath, patternPath } = getCirclePaths(unit)
-    const { leftWingPath, rightWingPath } = wings ? getWingPaths(unit) : { leftWingPath: undefined, rightWingPath: undefined }
+    const wingPath = wings ? getWingPath(unit) : undefined;
 
     return (<>
+        {wingPath && <>
+            <path d={wingPath} fill="white" />
+            <path d={wingPath} stroke={'black'} fill="none" />
+        </>}
         <path d={outlinePath} fill={col1} />
         {patternPath && <path d={patternPath} fill={col2} />}
         <path d={outlinePath} stroke={'black'} fill="none" />
-        {leftWingPath && <>
-            <path d={leftWingPath} fill="white" />
-            <path d={leftWingPath} stroke={'black'} fill="none" />
-        </>}
-        {rightWingPath && <>
-            <path d={rightWingPath} fill="white" />
-            <path d={rightWingPath} stroke={'black'} fill="none" />
-        </>}
     </>)
 }
 

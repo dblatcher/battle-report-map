@@ -126,65 +126,74 @@ export const getCirclePaths = (unit: Unit): {
     }
 }
 
-export const getWingPaths = (unit: Unit): {
-    leftWingPath?: string,
-    rightWingPath?: string,
-} => {
+export const getWingPath = (unit: Unit): string => {
     const { x, y, heading, width } = unit
 
-    const front = Math.PI + heading
-    const radius = width / 2
+    const forward = Math.PI + heading
+    const wingScale = width * .5
+
+    const goForward = (d: number) => getXYVector(d * wingScale, forward)
+    const goRight = (d: number) => getXYVector(d * wingScale, forward + inRads(90))
+    const plot = (f: number, r: number): Cartesian => addCartesian([goForward(f), goRight(r)]);
+
+    const topRight = plot(.5, 2)
+    const oneRight = plot(.3, 1.8)
+    const oneRightIn = plot(.3,1.6)
+    const twoRight = plot(.1,1.6)
+    const twoRightIn = plot(.1,1.4)
+    const threeRight = plot(-.1,1.4)
+    const threeRightIn = plot(-.1,1.2)
+    const fourRight = plot(-.3,1.2)
+    const fourRightIn = plot(-.3,1.0)
+
+    const topLeft = plot(.5, -2)
+    const oneLeft = plot(.3, -1.8)
+    const oneLeftIn = plot(.3, -1.6)
+    const twoLeft = plot(.1, -1.6)
+    const twoLeftIn = plot(.1, -1.4)
+    const threeLeft = plot(-.1, -1.4)
+    const threeLeftIn = plot(-.1, -1.2)
+    const fourLeft = plot(-.3, -1.2)
+
     const pointAt = (v: Cartesian) => `${x + v.x}, ${y + v.y}`
+    const arcRadi = `${wingScale * .2} ${wingScale * .2}`
 
-    const rightSegmentPath = (startAngle: number, length: number, depth: number) => {
-        const startPoint = getXYVector(radius, front - inRads(startAngle));
-        const toTip = getXYVector(length, front - inRads(90));
-        const tip = addCartesian([startPoint, toTip])
-        const lowerTip = addCartesian([startPoint, toTip, getXYVector(-depth, front)])
-        const segmentAngle = Math.atan(depth / radius)
-        const endPoint = getXYVector(radius, front - inRads(startAngle) - segmentAngle);
+    return `
+    M ${pointAt(topRight)}
 
-        return `
-        M ${pointAt(startPoint)}
-        L ${pointAt(tip)}
-        A ${depth / 2} ${depth / 2} 0 0 1 ${pointAt(lowerTip)}
-        L ${pointAt(endPoint)}
-        `
-    }
-    const leftSegmentPath = (startAngle: number, length: number, depth: number) => {
-        const startPoint = getXYVector(radius, front + inRads(startAngle));
-        const toTip = getXYVector(length, front + inRads(90));
-        const tip = addCartesian([startPoint, toTip])
-        const lowerTip = addCartesian([startPoint, toTip, getXYVector(-depth, front)])
-        const segmentAngle = Math.atan(depth / radius)
-        const endPoint = getXYVector(radius, front + inRads(startAngle) + segmentAngle);
+    A ${arcRadi} 0 0 0 ${pointAt(oneRight)}
+    L ${pointAt(oneRightIn)}
+    L ${pointAt(oneRight)}
 
-        return `
-        M ${pointAt(startPoint)}
-        L ${pointAt(tip)}
-        A ${depth / 2} ${depth / 2} 0 0 0 ${pointAt(lowerTip)}
-        L ${pointAt(endPoint)}
-        `
-    }
+    A ${arcRadi} 0 0 0 ${pointAt(twoRight)}
+    L ${pointAt(twoRightIn)}
+    L ${pointAt(twoRight)}
 
+    A ${arcRadi} 0 0 0 ${pointAt(threeRight)}
+    L ${pointAt(threeRightIn)}
+    L ${pointAt(threeRight)}
 
-    const scale = width/20
+    A ${arcRadi} 0 0 0 ${pointAt(fourRight)}
+    L ${pointAt(fourRightIn)}
+    L ${pointAt(fourRight)}
 
-    const rightWingPath = `
-    ${rightSegmentPath(45, 9*scale, 4*scale)}
-    ${rightSegmentPath(70, 4*scale, 3*scale)}
-    ${rightSegmentPath(90, 1*scale, 3*scale)}
+    L ${pointAt(fourLeft)}
+
+    A ${arcRadi} 0 0 0 ${pointAt(threeLeft)}
+    L ${pointAt(threeLeftIn)}
+    L ${pointAt(threeLeft)}
+
+    A ${arcRadi} 0 0 0 ${pointAt(twoLeft)}
+    L ${pointAt(twoLeftIn)}
+    L ${pointAt(twoLeft)}
+
+    A ${arcRadi} 0 0 0 ${pointAt(oneLeft)}
+    L ${pointAt(oneLeftIn)}
+    L ${pointAt(oneLeft)}
+
+    A ${arcRadi} 0 0 0 ${pointAt(topLeft)}
+    L ${pointAt(topRight)}
     `
-    const leftWingPath = `
-    ${leftSegmentPath(45, 9*scale, 4*scale)}
-    ${leftSegmentPath(70, 4*scale, 3*scale)}
-    ${leftSegmentPath(90, 1*scale, 3*scale)}
-    `
-
-    return {
-        leftWingPath,
-        rightWingPath,
-    }
 }
 
 
