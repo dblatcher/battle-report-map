@@ -5,7 +5,12 @@ import { Unit } from "@/types";
 import { MarkersOnUnit } from "./Markers";
 
 
-type Props = { unit: Unit, isActive?: boolean, showMarkers?: boolean }
+type Props = {
+    unit: Unit,
+    isActive?: boolean,
+    showMarkers?: boolean,
+    onContextMenu?: { (): void },
+}
 
 
 const PolygonDesign = ({ unit }: { unit: Unit }) => {
@@ -47,11 +52,18 @@ const CircleDesign = ({ unit }: { unit: Unit }) => {
     </>)
 }
 
-export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
+export const UnitFigure = ({ unit, isActive, showMarkers, onContextMenu }: Props) => {
     const { x, y, heading, badge, shape } = unit
 
     return (
-        <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}>
+        <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}
+        onContextMenu={(event) => {
+            if (onContextMenu) {
+                event.preventDefault()
+                onContextMenu()
+            }
+        }}
+        >
             {shape === 'circle' ? <CircleDesign unit={unit} /> : <PolygonDesign unit={unit} />}
             {badge && (
                 <image {...badge} transform={`

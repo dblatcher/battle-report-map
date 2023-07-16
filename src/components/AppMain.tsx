@@ -28,7 +28,32 @@ export const AppMain = () => {
     })
     const [terrainPieces, terrainPieceArray] = useArrayState<TerrainPiece>([])
 
-    const [units, unitArray] = useArrayState<Unit>([])
+    const [units, unitArray] = useArrayState<Unit>([
+        {
+            shape: 'circle',
+            x: 100,
+            y: 100,
+            heading: .3,
+            width: 20,
+            height: 20,
+            col1: '#f0f000',
+            col2: '#f0f0e0',
+            patternShape: 'left-diagonal',
+            wings: true,
+        },
+        {
+            shape: 'circle',
+            x: 160,
+            y: 100,
+            heading: .5,
+            width: 40,
+            height: 40,
+            col1: '#f00000',
+            col2: '#f09000',
+            patternShape: 'left-diagonal',
+            wings: true,
+        },
+    ])
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
     const [activeTerrainPieceIndex, setActiveTerrainPieceIndex] = useState<number | undefined>(undefined)
 
@@ -89,7 +114,9 @@ export const AppMain = () => {
                                 <UnitFigure key={index}
                                     isActive={activeUnitIndex === index}
                                     showMarkers
-                                    unit={unit} />
+                                    unit={unit} 
+                                    onContextMenu={() => {setActiveUnitIndex(index)}}
+                                    />
                             ))}
 
                             {terrainPieces.filter(piece => piece.aboveUnits).map((piece, index) => (
