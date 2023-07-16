@@ -114,7 +114,7 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
                             sx={{ padding: 1 }}
                             label="wings"
                             control={
-                                <Switch checked={unit.wings} onChange={(e) => {
+                                <Switch checked={!!unit.wings} onChange={(e) => {
                                     setUnit({
                                         ...unit,
                                         wings: e.target.checked
