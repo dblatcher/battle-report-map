@@ -1,5 +1,5 @@
 import { Unit, UnitDesign } from "@/types";
-import { Point, getXYVector } from "./geometry";
+import { Cartesian, Point, addCartesian, getXYVector } from "./geometry";
 import { inRads } from "./uitl";
 
 const getRectangularUnitPoints = (design: UnitDesign) => {
@@ -125,6 +125,68 @@ export const getCirclePaths = (unit: Unit): {
         patternPath,
     }
 }
+
+export const getWingPaths = (unit: Unit): {
+    leftWingPath?: string,
+    rightWingPath?: string,
+} => {
+    const { x, y, heading, width } = unit
+
+    const front = Math.PI + heading
+    const radius = width / 2
+    const pointAt = (v: Cartesian) => `${x + v.x}, ${y + v.y}`
+
+    const rightSegmentPath = (startAngle: number, length: number, depth: number) => {
+        const startPoint = getXYVector(radius, front - inRads(startAngle));
+        const toTip = getXYVector(length, front - inRads(90));
+        const tip = addCartesian([startPoint, toTip])
+        const lowerTip = addCartesian([startPoint, toTip, getXYVector(-depth, front)])
+        const segmentAngle = Math.atan(depth / radius)
+        const endPoint = getXYVector(radius, front - inRads(startAngle) - segmentAngle);
+
+        return `
+        M ${pointAt(startPoint)}
+        L ${pointAt(tip)}
+        A ${depth / 2} ${depth / 2} 0 0 1 ${pointAt(lowerTip)}
+        L ${pointAt(endPoint)}
+        `
+    }
+    const leftSegmentPath = (startAngle: number, length: number, depth: number) => {
+        const startPoint = getXYVector(radius, front + inRads(startAngle));
+        const toTip = getXYVector(length, front + inRads(90));
+        const tip = addCartesian([startPoint, toTip])
+        const lowerTip = addCartesian([startPoint, toTip, getXYVector(-depth, front)])
+        const segmentAngle = Math.atan(depth / radius)
+        const endPoint = getXYVector(radius, front + inRads(startAngle) + segmentAngle);
+
+        return `
+        M ${pointAt(startPoint)}
+        L ${pointAt(tip)}
+        A ${depth / 2} ${depth / 2} 0 0 0 ${pointAt(lowerTip)}
+        L ${pointAt(endPoint)}
+        `
+    }
+
+
+    const scale = width/20
+
+    const rightWingPath = `
+    ${rightSegmentPath(45, 9*scale, 4*scale)}
+    ${rightSegmentPath(70, 4*scale, 3*scale)}
+    ${rightSegmentPath(90, 1*scale, 3*scale)}
+    `
+    const leftWingPath = `
+    ${leftSegmentPath(45, 9*scale, 4*scale)}
+    ${leftSegmentPath(70, 4*scale, 3*scale)}
+    ${leftSegmentPath(90, 1*scale, 3*scale)}
+    `
+
+    return {
+        leftWingPath,
+        rightWingPath,
+    }
+}
+
 
 export const pointToString = (pair: Point) => `${pair[0]},${pair[1]}`
 

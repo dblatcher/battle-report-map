@@ -40,7 +40,8 @@ export type UnitDesign = {
     col2: string;
     patternShape?: PatternShape;
     shape: 'rectangle' | 'triangle' |'circle';
-    badge?: Badge
+    badge?: Badge;
+    wings?: boolean;
 }
 
 export type Markers = {

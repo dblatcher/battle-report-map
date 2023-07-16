@@ -1,5 +1,5 @@
 import { Point, getXYVector, rotate, translate } from "@/lib/geometry";
-import { getCirclePaths, getPoints, pointToString } from "@/lib/shapes";
+import { getCirclePaths, getPoints, getWingPaths, pointToString } from "@/lib/shapes";
 import { Unit } from "@/types";
 import { MarkersOnUnit } from "./Markers";
 import { inDegrees, inRads } from "@/lib/uitl";
@@ -32,25 +32,31 @@ const PolygonDesign = ({ unit }: { unit: Unit }) => {
 }
 
 const CircleDesign = ({ unit }: { unit: Unit }) => {
-    const { col1, col2 } = unit
+    const { col1, col2, wings } = unit
     const { outlinePath, patternPath } = getCirclePaths(unit)
+    const { leftWingPath, rightWingPath } = wings ? getWingPaths(unit) : { leftWingPath: undefined, rightWingPath: undefined }
 
     return (<>
         <path d={outlinePath} fill={col1} />
         {patternPath && <path d={patternPath} fill={col2} />}
         <path d={outlinePath} stroke={'black'} fill="none" />
+        {leftWingPath && <>
+            <path d={leftWingPath} fill="white" />
+            <path d={leftWingPath} stroke={'black'} fill="none" />
+        </>}
+        {rightWingPath && <>
+            <path d={rightWingPath} fill="white" />
+            <path d={rightWingPath} stroke={'black'} fill="none" />
+        </>}
     </>)
 }
 
 export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
     const { x, y, heading, badge, shape } = unit
 
-
     return (
         <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}>
-
             {shape === 'circle' ? <CircleDesign unit={unit} /> : <PolygonDesign unit={unit} />}
-
             {badge && (
                 <image {...badge} transform={`
                 translate(${x} ${y})
@@ -61,7 +67,6 @@ export const UnitFigure = ({ unit, isActive, showMarkers }: Props) => {
                 />
             )}
             {showMarkers && <MarkersOnUnit unit={unit} />}
-
         </g>
     )
 }

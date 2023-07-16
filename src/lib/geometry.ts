@@ -1,6 +1,14 @@
+export type Point = [number, number]
+export type Cartesian = { x: number, y: number }
+
+export const addCartesian = (list: Cartesian[]): Cartesian => ({
+    x: list.reduce<number>((sum, nextPoint) => sum + nextPoint.x, 0),
+    y: list.reduce<number>((sum, nextPoint) => sum + nextPoint.y, 0),
+})
+
 function getVectorX(magnitude: number, direction: number) { return magnitude * Math.sin(direction) }
 function getVectorY(magnitude: number, direction: number) { return magnitude * Math.cos(direction) }
-export function getXYVector(magnitude: number, direction: number) { return { x: getVectorX(magnitude, direction), y: getVectorY(magnitude, direction) } }
+export function getXYVector(magnitude: number, direction: number): Cartesian { return { x: getVectorX(magnitude, direction), y: getVectorY(magnitude, direction) } }
 
 /**
  * Calculate the magnitude of an [x,y] vector, using pythagoras' theorum
@@ -38,7 +46,7 @@ function getDirection(x: number, y: number) {
     }
 }
 
-export type Point = [number, number]
+
 
 export const rotate = (heading: number) => (pair: Point): Point => {
     const [x, y] = pair
