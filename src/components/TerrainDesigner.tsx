@@ -1,9 +1,10 @@
 import { ImageAsset, TerrainPiece } from "@/types";
-import { Box, Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Stack, TextField } from "@mui/material";
 import { RotationButtons } from "./RotationButtons";
 import { useState } from "react";
 import { terrainImages } from "@/lib/terrainAssets";
 import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
+import { RotationSlider } from "./RotationSlider";
 
 
 type Props = {
@@ -25,46 +26,44 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
 
     return (
         <>
-            <Box padding={1} borderColor={'primary.dark'} border={1}>
-                <Stack marginTop={1} direction='row' spacing={1}>
-                    <Switch checked={isActive} onChange={toggle} />
-                    <Stack marginTop={1} direction='row'>
-                        <TextField label='width' size="small"
+            <Stack marginTop={1} direction='row' spacing={1} padding={1} borderColor={'primary.dark'} border={1} alignItems={'center'}>
+                <Button variant="outlined" onClick={() => setImageDialogOpen(true)} sx={{ padding: 0 }}>
+                    <TerrainPieceInFrame
+                        terrainPiece={terrainPiece}
+                        boxProps={{ minHeight: 50, minWidth: 50, display: 'flex', alignItems: 'center' }}
+                    />
+                </Button>
+                <Box >
+                    <Stack direction='row' spacing={1}>
+                        <Checkbox checked={isActive} onChange={toggle} />
+                        <TextField label='width' size="small" variant='standard' sx={{ width: 80 }}
                             type="number"
                             value={width}
                             onChange={(event) => { merge({ width: Number(event.target.value) }) }}
                             inputProps={{ step: 5 }} />
-                        <TextField label='height' size="small"
+                        <TextField label='height' size="small" variant='standard' sx={{ width: 80 }}
                             type="number"
                             value={height}
                             onChange={(event) => { merge({ height: Number(event.target.value) }) }}
                             inputProps={{ step: 5 }} />
                     </Stack>
-                </Stack>
 
-                <Stack direction={'row'} spacing={1}>
-                    <Button variant="outlined" onClick={() => setImageDialogOpen(true)} sx={{ padding: 0 }}>
-                        <TerrainPieceInFrame 
-                            terrainPiece={terrainPiece} 
-                            boxProps={{ minHeight: 50, minWidth: 50, display: 'flex', alignItems: 'center' }} 
-                        />
-                    </Button>
-
-                    <Stack marginTop={1} direction='row' justifyContent={'space-between'} alignItems={'center'} spacing={1}>
-                        <div>
-                            <RotationButtons value={heading} setValue={(value) => merge({ heading: value })} showValue />
-                        </div>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    size="small"
-                                    value={aboveUnits}
-                                    onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
-                                />}
-                            label="Above" />
+                    <Stack direction={'row'} spacing={1}>
+                        <Stack marginTop={1} direction='row' justifyContent={'space-between'} alignItems={'center'} spacing={1}>
+                            <RotationSlider value={heading} setValue={(value) => merge({ heading: value })} showValue />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        value={aboveUnits}
+                                        onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
+                                    />}
+                                label="Above" />
+                        </Stack>
                     </Stack>
-                </Stack>
-            </Box>
+                </Box>
+            </Stack >
+
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
                 <DialogTitle>Pick Terrain Image</DialogTitle>
                 <DialogContent>
