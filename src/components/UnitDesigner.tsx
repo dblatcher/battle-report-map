@@ -3,6 +3,7 @@ import { Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Sele
 import { ChangeEventHandler, useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 import { BadgePicker } from "./BadgePicker"
+import { NumberField } from "./NumberField"
 
 interface Props {
     confirm: { (design: UnitDesign): void };
@@ -20,7 +21,7 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
         shape: 'rectangle',
     })
 
-    const changeUnitProperty = (property: keyof UnitDesign, value: string) => {
+    const changeUnitProperty = (property: keyof UnitDesign, value: string | number) => {
         switch (property) {
             case "width":
             case "height":
@@ -62,17 +63,16 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
     return (
         <Grid container width={'lg'}>
             <Grid item xs={8}>
-                <Stack direction={'row'}>
-                    <TextField label='width'
-                        type="number"
+                <Stack direction={'row'} alignItems={'flex-end'} spacing={1}>
+
+                    <NumberField label='width'
                         value={unit.width}
-                        onChange={makeHandler('width')}
-                        inputProps={{ step: 5 }} />
-                    <TextField label='height'
-                        type="number"
+                        onChange={value => changeUnitProperty('width', value)} />
+
+                    <NumberField label='height'
                         value={unit.height}
-                        onChange={makeHandler('height')}
-                        inputProps={{ step: 5 }} />
+                        onChange={value => changeUnitProperty('height', value)} />
+
                 </Stack>
                 <Stack direction={'row'}>
                     <FormControl fullWidth>

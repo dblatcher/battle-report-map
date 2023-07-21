@@ -5,6 +5,7 @@ import { useState } from "react";
 import { terrainImages } from "@/lib/terrainAssets";
 import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
 import { RotationSlider } from "./RotationSlider";
+import { NumberField } from "./NumberField";
 
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
 
 export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props) => {
     const [imageDialogOpen, setImageDialogOpen] = useState(false)
-    const { x, y, heading, width, height, aboveUnits = false } = terrainPiece
+    const { heading, width, height, aboveUnits = false } = terrainPiece
 
     const pickImage = (image: ImageAsset) => {
         merge({ ...image })
@@ -36,16 +37,8 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
                 <Box >
                     <Stack direction='row' spacing={1}>
                         <Checkbox checked={isActive} onChange={toggle} />
-                        <TextField label='width' size="small" variant='standard' sx={{ width: 80 }}
-                            type="number"
-                            value={width}
-                            onChange={(event) => { merge({ width: Number(event.target.value) }) }}
-                            inputProps={{ step: 5 }} />
-                        <TextField label='height' size="small" variant='standard' sx={{ width: 80 }}
-                            type="number"
-                            value={height}
-                            onChange={(event) => { merge({ height: Number(event.target.value) }) }}
-                            inputProps={{ step: 5 }} />
+                        <NumberField label='width' value={width} onChange={(newValue) => { merge({ width: newValue }) }} />
+                        <NumberField label='height' value={height} onChange={(newValue) => { merge({ height: newValue }) }} />
                     </Stack>
 
                     <Stack direction={'row'} spacing={1}>
@@ -67,15 +60,16 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
                 <DialogTitle>Pick Terrain Image</DialogTitle>
                 <DialogContent>
-                    <Grid container minWidth={'lg'}>
+                    <Grid container minWidth={'lg'} spacing={1}>
                         {terrainImages.map((image, index) => (
-                            <Grid item xs={3} key={index} display={'flex'}>
+                            <Grid item key={index} display={'flex'}>
                                 <Button variant="outlined"
                                     onClick={() => pickImage(image)}>
                                     <TerrainPieceInFrame
+                                        boxProps={{ width: 30 }}
                                         terrainPiece={{
-                                            height: 50,
-                                            width: 50 * image.width / image.height,
+                                            height: 30,
+                                            width: 30 * image.width / image.height,
                                             href: image.href,
                                             x: 0, y: 0,
                                             heading: 0
