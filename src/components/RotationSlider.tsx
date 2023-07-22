@@ -1,11 +1,25 @@
 import { _DEG, inDegrees, inRads } from "@/lib/uitl"
-import { Typography, Slider, Stack, Box } from "@mui/material"
+import { Typography, Slider, Stack, SliderThumb } from "@mui/material"
 
 interface Props {
     value: number,
     setValue: { (newValue: number): void }
     showValue?: boolean
 }
+
+
+interface RotationThumbComponentProps extends React.HTMLAttributes<unknown> { }
+
+function RotationThumbComponent(props: RotationThumbComponentProps) {
+    const { children, ...other } = props;
+    return (
+        <SliderThumb {...other}>
+            {children}
+            <Typography color={'primary.contrastText'}>↻</Typography>
+        </SliderThumb>
+    );
+}
+
 
 export const RotationSlider = ({ value, setValue, showValue }: Props) => {
 
@@ -17,6 +31,7 @@ export const RotationSlider = ({ value, setValue, showValue }: Props) => {
         <Stack paddingX={1} direction="column" alignItems="center">
             <Stack spacing={2} direction="row" alignItems="center" sx={{ width: 80 }}>
                 <Slider value={value} onChange={handleChange}
+                    slots={{ thumb: RotationThumbComponent }}
                     step={inRads(5)}
                     min={0}
                     max={inRads(360)} />
