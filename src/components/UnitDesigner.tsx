@@ -1,5 +1,5 @@
 import { Badge, UnitDesign } from "@/types"
-import { Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material"
 import { ChangeEventHandler, useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 import { BadgePicker } from "./BadgePicker"
@@ -8,11 +8,14 @@ import { NumberField } from "./NumberField"
 interface Props {
     confirm: { (design: UnitDesign): void };
     badges: Badge[];
+    initialDesign?: UnitDesign;
+    isOpen?: boolean
+    close: { (): void }
 }
 
-export const UnitDesigner = ({ confirm, badges }: Props) => {
+export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: Props) => {
 
-    const [unit, setUnit] = useState<UnitDesign>({
+    const [unit, setUnit] = useState<UnitDesign>(initialDesign || {
         width: 40,
         height: 40,
         patternShape: 'vertical',
@@ -61,75 +64,82 @@ export const UnitDesigner = ({ confirm, badges }: Props) => {
     const makeHandler = (property: keyof UnitDesign): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => (event) => { changeUnitProperty(property, event.target.value) }
 
     return (
-        <Grid container width={'lg'}>
-            <Grid item xs={8}>
-                <Stack direction={'row'} alignItems={'flex-end'} spacing={1}>
+        <Dialog open={!!isOpen} fullWidth>
+            <DialogContent>
+                <Grid container width={'lg'}>
+                    <Grid item xs={8}>
+                        <Stack direction={'row'} alignItems={'flex-end'} spacing={1}>
 
-                    <NumberField label='width'
-                        value={unit.width}
-                        onChange={value => changeUnitProperty('width', value)} />
+                            <NumberField label='width'
+                                value={unit.width}
+                                onChange={value => changeUnitProperty('width', value)} />
 
-                    <NumberField label='height'
-                        value={unit.height}
-                        onChange={value => changeUnitProperty('height', value)} />
+                            <NumberField label='height'
+                                value={unit.height}
+                                onChange={value => changeUnitProperty('height', value)} />
 
-                </Stack>
-                <Stack direction={'row'}>
-                    <FormControl fullWidth>
-                        <InputLabel >Pattern</InputLabel>
-                        <Select
-                            value={unit.patternShape ?? ''}
-                            label="Pattern"
-                            onChange={(event) => {
-                                changeUnitProperty('patternShape', event.target.value)
-                            }}
-                        >
-                            <MenuItem value={''}>plain</MenuItem>
-                            <MenuItem value={'left-diagonal'}>left-diagonal</MenuItem>
-                            <MenuItem value={'right-diagonal'}>right-diagonal</MenuItem>
-                            <MenuItem value={'vertical'}>vertical</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                        <InputLabel >Shape</InputLabel>
-                        <Select
-                            value={unit.shape}
-                            label="shape"
-                            onChange={(event) => {
-                                changeUnitProperty('shape', event.target.value)
-                            }}
-                        >
-                            <MenuItem value={'rectangle'}>rectangle</MenuItem>
-                            <MenuItem value={'triangle'}>triangle</MenuItem>
-                            <MenuItem value={'circle'}>circle</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Stack>
+                        </Stack>
+                        <Stack direction={'row'}>
+                            <FormControl fullWidth>
+                                <InputLabel >Pattern</InputLabel>
+                                <Select
+                                    value={unit.patternShape ?? ''}
+                                    label="Pattern"
+                                    onChange={(event) => {
+                                        changeUnitProperty('patternShape', event.target.value)
+                                    }}
+                                >
+                                    <MenuItem value={''}>plain</MenuItem>
+                                    <MenuItem value={'left-diagonal'}>left-diagonal</MenuItem>
+                                    <MenuItem value={'right-diagonal'}>right-diagonal</MenuItem>
+                                    <MenuItem value={'vertical'}>vertical</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth>
+                                <InputLabel >Shape</InputLabel>
+                                <Select
+                                    value={unit.shape}
+                                    label="shape"
+                                    onChange={(event) => {
+                                        changeUnitProperty('shape', event.target.value)
+                                    }}
+                                >
+                                    <MenuItem value={'rectangle'}>rectangle</MenuItem>
+                                    <MenuItem value={'triangle'}>triangle</MenuItem>
+                                    <MenuItem value={'circle'}>circle</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Stack>
 
-                <Stack direction={'row'}>
-                    <TextField sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
-                    <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
-                    {unit.shape === 'circle' && (
-                        <FormControlLabel
-                            sx={{ padding: 1 }}
-                            label="wings"
-                            control={
-                                <Switch checked={!!unit.wings} onChange={(e) => {
-                                    setUnit({
-                                        ...unit,
-                                        wings: e.target.checked
-                                    })
-                                }} />}
-                        />
-                    )}
-                </Stack>
+                        <Stack direction={'row'}>
+                            <TextField sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
+                            <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
+                            {unit.shape === 'circle' && (
+                                <FormControlLabel
+                                    sx={{ padding: 1 }}
+                                    label="wings"
+                                    control={
+                                        <Switch checked={!!unit.wings} onChange={(e) => {
+                                            setUnit({
+                                                ...unit,
+                                                wings: e.target.checked
+                                            })
+                                        }} />}
+                                />
+                            )}
+                        </Stack>
 
-                <BadgePicker unit={unit} setUnit={setUnit} badges={badges} />
-                <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
-            </Grid>
-            <Grid item xs={4} display={'flex'} justifyContent={'flex-end'}>
-                <UnitFigureInFrame unit={unit} boxProps={{ flex: 1, padding: 1 }} />
-            </Grid>
-        </Grid>
+                        <BadgePicker unit={unit} setUnit={setUnit} badges={badges} />
+                        <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
+                    </Grid>
+                    <Grid item xs={4} display={'flex'} justifyContent={'flex-end'}>
+                        <UnitFigureInFrame unit={unit} boxProps={{ flex: 1, padding: 1 }} />
+                    </Grid>
+                </Grid>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={close}>close</Button>
+            </DialogActions>
+        </Dialog>
     )
 }

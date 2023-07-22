@@ -1,17 +1,17 @@
+import { defaultBadges } from "@/lib/badges"
 import { useArrayState } from "@/lib/useArrayState"
+import { useObjectState } from "@/lib/useObjectState"
 import { Badge, BattleField, Position, TerrainPiece, Unit, UnitDesign } from "@/types"
-import { AppBar, Box, Button, Container, Dialog, DialogActions, DialogContent, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, Container, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
+import { BattleFieldDesigner } from "./BattleFieldDesigner"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
-import { UnitFigure } from "./UnitFigure"
+import { FloodRect } from "./FloodRect"
+import { TerrainFigure } from "./TerrainFigure"
 import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
-import { FloodRect } from "./FloodRect"
-import { BattleFieldDesigner } from "./BattleFieldDesigner"
-import { defaultBadges } from "@/lib/badges"
-import { useObjectState } from "@/lib/useObjectState"
-import { a11yProps, CustomTabPanel } from "./tab-panels"
-import { TerrainFigure } from "./TerrainFigure"
+import { UnitFigure } from "./UnitFigure"
+import { CustomTabPanel, a11yProps } from "./tab-panels"
 
 enum PanelNumbers {
     Terrain,
@@ -135,7 +135,8 @@ export const AppMain = () => {
                                     }}
                                     move={(position) => { handleMove(position, index) }}
                                     deleteUnit={() => { unitArray.deleteItem(index) }}
-                                    setMarkers={(markers) => { unitArray.merge(index, markers) }}
+                                    merge={(changes) => { unitArray.merge(index, changes) }}
+                                    badges={badges}
                                 />
                             ))}
 
@@ -148,14 +149,12 @@ export const AppMain = () => {
                     </Grid>
                 </Grid>
 
-                <Dialog open={unitDesignerOpen} fullWidth>
-                    <DialogContent>
-                        <UnitDesigner confirm={handleConfirmDesign} badges={badges} />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => { setUnitDesignerOpen(false) }}>close</Button>
-                    </DialogActions>
-                </Dialog>
+                <UnitDesigner
+                    confirm={handleConfirmDesign}
+                    badges={badges}
+                    isOpen={unitDesignerOpen}
+                    close={() => { setUnitDesignerOpen(false) }} />
+
             </Container>
         </Box>
     )
