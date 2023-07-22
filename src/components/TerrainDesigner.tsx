@@ -1,11 +1,10 @@
-import { ImageAsset, TerrainPiece } from "@/types";
-import { Box, Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Stack, TextField } from "@mui/material";
-import { RotationButtons } from "./RotationButtons";
-import { useState } from "react";
 import { terrainImages } from "@/lib/terrainAssets";
-import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
-import { RotationSlider } from "./RotationSlider";
+import { ImageAsset, TerrainPiece } from "@/types";
+import { Box, Button, Card, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Stack } from "@mui/material";
+import { useState } from "react";
 import { NumberField } from "./NumberField";
+import { RotationSlider } from "./RotationSlider";
+import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
 
 
 type Props = {
@@ -13,16 +12,16 @@ type Props = {
     merge: { (changes: Partial<TerrainPiece>): void },
     isActive: boolean
     toggle: { (): void }
+    deleteItem: { (): void }
 }
 
 
-export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props) => {
+export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle, deleteItem }: Props) => {
     const [imageDialogOpen, setImageDialogOpen] = useState(false)
     const { heading, width, height, aboveUnits = false } = terrainPiece
 
     const pickImage = (image: ImageAsset) => {
         merge({ ...image })
-        setImageDialogOpen(false)
     }
 
     return (
@@ -34,25 +33,10 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
                         boxProps={{ minHeight: 50, minWidth: 50, display: 'flex', alignItems: 'center' }}
                     />
                 </Button>
-                <Box >
-                    <Stack direction='row' spacing={1}>
-                        <Checkbox checked={isActive} onChange={toggle} />
-                        <NumberField label='width' value={width} onChange={(newValue) => { merge({ width: newValue }) }} />
-                        <NumberField label='height' value={height} onChange={(newValue) => { merge({ height: newValue }) }} />
-                    </Stack>
-
-                    <Stack direction={'row'} spacing={1}>
-                        <Stack marginTop={1} direction='row' justifyContent={'space-between'} alignItems={'center'} spacing={1}>
-                            <RotationSlider value={heading} setValue={(value) => merge({ heading: value })} showValue />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        size="small"
-                                        value={aboveUnits}
-                                        onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
-                                    />}
-                                label="Above" />
-                        </Stack>
+                <Box>
+                    <Stack direction='row' justifyContent={'space-between'} alignItems={'center'} spacing={1}>
+                        <Checkbox checked={isActive} onChange={toggle} size="small" />
+                        <Button variant="outlined" size="small" onClick={deleteItem}>x</Button>
                     </Stack>
                 </Box>
             </Stack >
@@ -60,6 +44,38 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
                 <DialogTitle>Pick Terrain Image</DialogTitle>
                 <DialogContent>
+
+                    <Card sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'primary.light',
+                        marginBottom: 2
+                    }}>
+                        <TerrainPieceInFrame
+                            allowRotate
+                            terrainPiece={terrainPiece}
+                            boxProps={{
+                                width, height,
+                                minHeight: 150,
+                                display: 'flex', alignItems: 'center'
+                            }} />
+                    </Card>
+
+                    <Stack direction='row' spacing={1} marginTop={1}>
+                        <NumberField label='width' value={width} onChange={(newValue) => { merge({ width: newValue }) }} />
+                        <NumberField label='height' value={height} onChange={(newValue) => { merge({ height: newValue }) }} />
+                        <RotationSlider value={heading} setValue={(value) => merge({ heading: value })} showValue />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    size="small"
+                                    value={aboveUnits}
+                                    onChange={(event) => { merge({ aboveUnits: event.target.checked }) }}
+                                />}
+                            label="Above Units" />
+                    </Stack>
+
                     <Grid container minWidth={'lg'} spacing={1}>
                         {terrainImages.map((image, index) => (
                             <Grid item key={index} display={'flex'}>
@@ -80,7 +96,10 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle }: Props
                         ))}
                     </Grid>
                 </DialogContent>
-            </Dialog>
+                <DialogActions>
+                    <Button onClick={() => { setImageDialogOpen(false) }}>ok</Button>
+                </DialogActions>
+            </Dialog >
         </>
     )
 }

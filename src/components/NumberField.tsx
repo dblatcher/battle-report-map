@@ -10,7 +10,7 @@ interface Props {
 export const NumberField = ({ label, value, onChange, step = 5 }: Props) => {
 
     return (
-        <TextField label={label} size="small" variant='standard' sx={{ width: 80 }}
+        <TextField label={label} size="small" variant='outlined' sx={{ width: 80 }}
             type="number"
             value={value}
             onChange={(event) => { onChange(Number(event.target.value)) }}

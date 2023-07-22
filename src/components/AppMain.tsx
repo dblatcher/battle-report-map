@@ -82,20 +82,26 @@ export const AppMain = () => {
                             <FloodRect fill={battleField.backgroundColor} viewBox={battleField.viewBox} />
 
                             {terrainPieces.filter(piece => !piece.aboveUnits).map((piece, index) => (
-                                <TerrainFigure terrainPiece={piece} key={index} />
+                                <TerrainFigure
+                                    isActive={activeTerrainPieceIndex === index && tabOpen == PanelNumbers.Terrain}
+                                    terrainPiece={piece}
+                                    key={index} />
                             ))}
 
                             {units.map((unit, index) => (
                                 <UnitFigure key={index}
-                                    isActive={activeUnitIndex === index}
+                                    isActive={activeUnitIndex === index && tabOpen == PanelNumbers.Units}
                                     showMarkers
-                                    unit={unit} 
-                                    onContextMenu={() => {setActiveUnitIndex(index)}}
-                                    />
+                                    unit={unit}
+                                    onContextMenu={() => { setActiveUnitIndex(index) }}
+                                />
                             ))}
 
                             {terrainPieces.filter(piece => piece.aboveUnits).map((piece, index) => (
-                                <TerrainFigure terrainPiece={piece} key={index} />
+                                <TerrainFigure
+                                    isActive={activeTerrainPieceIndex === index && tabOpen == PanelNumbers.Terrain}
+                                    terrainPiece={piece}
+                                    key={index} />
                             ))}
                         </DownloadableSvgFrame>
                     </Grid>
@@ -142,7 +148,7 @@ export const AppMain = () => {
                     </Grid>
                 </Grid>
 
-                <Dialog open={unitDesignerOpen} maxWidth="lg">
+                <Dialog open={unitDesignerOpen} fullWidth>
                     <DialogContent>
                         <UnitDesigner confirm={handleConfirmDesign} badges={badges} />
                     </DialogContent>

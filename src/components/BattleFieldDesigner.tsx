@@ -53,6 +53,7 @@ export const BattleFieldDesigner = ({ battleField, mergeBattleField, terrainPiec
                         merge={mergeTerrainPiece(index)}
                         isActive={index === activeTerrainPieceIndex}
                         toggle={toggleActive(index)}
+                        deleteItem={() => { terrainPieceArray.deleteItem(index) }}
                     />
                 ))}
             </Stack>
