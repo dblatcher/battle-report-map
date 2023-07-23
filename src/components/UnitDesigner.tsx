@@ -1,5 +1,5 @@
 import { Badge, UnitDesign } from "@/types"
-import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material"
 import { ChangeEventHandler, useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
 import { BadgePicker } from "./BadgePicker"
@@ -65,10 +65,13 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
 
     return (
         <Dialog open={!!isOpen} fullWidth>
+            <DialogTitle>
+                Unit Design
+            </DialogTitle>
             <DialogContent>
                 <Grid container width={'lg'}>
                     <Grid item xs={8}>
-                        <Stack direction={'row'} alignItems={'flex-end'} spacing={1}>
+                        <Stack direction={'row'} alignItems={'center'} spacing={1} marginTop={1}>
 
                             <NumberField label='width'
                                 value={unit.width}
@@ -78,9 +81,39 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                                 value={unit.height}
                                 onChange={value => changeUnitProperty('height', value)} />
 
+                            <FormControl size="small">
+                                <InputLabel >Shape</InputLabel>
+                                <Select
+                                    value={unit.shape}
+                                    label="shape"
+                                    onChange={(event) => {
+                                        changeUnitProperty('shape', event.target.value)
+                                    }}
+                                >
+                                    <MenuItem value={'rectangle'}>rectangle</MenuItem>
+                                    <MenuItem value={'triangle'}>triangle</MenuItem>
+                                    <MenuItem value={'circle'}>circle</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            {unit.shape === 'circle' && (
+                                <FormControlLabel
+                                    sx={{ padding: 1 }}
+                                    label="wings"
+                                    control={
+                                        <Switch size="small" checked={!!unit.wings} onChange={(e) => {
+                                            setUnit({
+                                                ...unit,
+                                                wings: e.target.checked
+                                            })
+                                        }} />}
+                                />
+                            )}
+
                         </Stack>
-                        <Stack direction={'row'}>
-                            <FormControl fullWidth>
+
+                        <Stack direction={'row'} alignItems={'center'} spacing={1} marginTop={1}>
+                            <FormControl size="small">
                                 <InputLabel >Pattern</InputLabel>
                                 <Select
                                     value={unit.patternShape ?? ''}
@@ -95,39 +128,11 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                                     <MenuItem value={'vertical'}>vertical</MenuItem>
                                 </Select>
                             </FormControl>
-                            <FormControl fullWidth>
-                                <InputLabel >Shape</InputLabel>
-                                <Select
-                                    value={unit.shape}
-                                    label="shape"
-                                    onChange={(event) => {
-                                        changeUnitProperty('shape', event.target.value)
-                                    }}
-                                >
-                                    <MenuItem value={'rectangle'}>rectangle</MenuItem>
-                                    <MenuItem value={'triangle'}>triangle</MenuItem>
-                                    <MenuItem value={'circle'}>circle</MenuItem>
-                                </Select>
-                            </FormControl>
+
+                            <TextField size="small" sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
+                            <TextField size="small" sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
                         </Stack>
 
-                        <Stack direction={'row'}>
-                            <TextField sx={{ minWidth: 60 }} label='col1' type="color" value={unit.col1} onChange={makeHandler('col1')} />
-                            <TextField sx={{ minWidth: 60 }} label='col2' type="color" value={unit.col2} onChange={makeHandler('col2')} />
-                            {unit.shape === 'circle' && (
-                                <FormControlLabel
-                                    sx={{ padding: 1 }}
-                                    label="wings"
-                                    control={
-                                        <Switch checked={!!unit.wings} onChange={(e) => {
-                                            setUnit({
-                                                ...unit,
-                                                wings: e.target.checked
-                                            })
-                                        }} />}
-                                />
-                            )}
-                        </Stack>
                         <BadgePicker unit={unit} setUnit={setUnit} badges={badges} />
                     </Grid>
                     <Grid item xs={4} display={'flex'} justifyContent={'flex-end'}>

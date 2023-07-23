@@ -1,7 +1,6 @@
-import { Badge, UnitDesign } from "@/types"
-import { Box, Button, Stack, TextField, Typography } from "@mui/material"
-import Image from "next/image"
-import { ChangeEventHandler } from "react";
+import { Badge, UnitDesign } from "@/types";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import Image from "next/image";
 import { NumberField } from "./NumberField";
 
 interface Props {
@@ -17,7 +16,7 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
 
     return (
         <Box>
-            <Typography variant="caption">badge</Typography>
+            <Typography variant='subtitle1'>Badge</Typography>
             <Stack direction={'row'}>
                 <Button
                     onClick={() => { setBadge(undefined) }}
