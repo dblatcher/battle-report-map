@@ -4,6 +4,7 @@ import { useState } from "react";
 import { RotationSlider } from "./RotationSlider";
 import { UnitDesigner } from "./UnitDesigner";
 import { UnitFigureInFrame } from "./UnitFigureInFrame";
+import { HitButtons } from "./HitButtons";
 
 type Props = {
     unit: Unit,
@@ -28,7 +29,7 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
         <Stack direction={'row'} spacing={1} alignItems={'center'} marginBottom={1} padding={1} borderColor={'primary.dark'} border={1}>
 
             <Button variant="outlined" sx={{ padding: 0, flexBasis: 80, minHeight: 60 }} onClick={() => { setUnitDesignerOpen(true) }}>
-                <UnitFigureInFrame unit={unit} boxProps={{ flexBasis: 60 }} />
+                <UnitFigureInFrame unit={unit} boxProps={{ flexBasis: 75 }} />
             </Button>
 
             <Box >
@@ -38,18 +39,10 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
                 </Stack>
                 <Stack direction={'row'}>
                     <RotationSlider value={unit.heading} setValue={setRotation} showValue />
-                    <ButtonGroup size="small">
-                        <Button onClick={() => {
-                            merge({
-                                hits: 1 + (unit.hits ?? 0)
-                            })
-                        }}>hit+</Button>
-                        <Button onClick={() => {
-                            merge({
-                                hits: Math.max(-1 + (unit.hits ?? 0), 0)
-                            })
-                        }}>hit-</Button>
-                    </ButtonGroup>
+                    <HitButtons
+                        count={unit.hits}
+                        label="hits"
+                        setCount={(hits) => merge({ hits })} />
                 </Stack>
             </Box>
         </Stack>
