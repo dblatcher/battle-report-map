@@ -2,6 +2,7 @@ import { Badge, UnitDesign } from "@/types"
 import { Box, Button, Stack, TextField, Typography } from "@mui/material"
 import Image from "next/image"
 import { ChangeEventHandler } from "react";
+import { NumberField } from "./NumberField";
 
 interface Props {
     unit: UnitDesign;
@@ -13,22 +14,6 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
 
     const { badge: currentBadge } = unit
     const setBadge = (badge: Badge | undefined) => setUnit({ ...unit, badge: badge ? { ...badge } : undefined })
-
-
-    const changeBadgeProperty = (property: keyof Badge, value: string) => {
-        switch (property) {
-            case "width":
-            case "height":
-                if (!currentBadge) {
-                    return
-                }
-                setBadge({ ...currentBadge, [property]: Number(value) })
-                break;
-
-        }
-    }
-
-    const makeHandler = (property: keyof Badge): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => (event) => { changeBadgeProperty(property, event.target.value) }
 
     return (
         <Box>
@@ -51,18 +36,18 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
                 ))}
             </Stack>
 
-            <Stack direction={'row'} minHeight={40}>
-                {unit.badge && <>
-                    <TextField label='width'
-                        type="number" size="small"
-                        value={unit.badge.width}
-                        onChange={makeHandler('width')}
-                        inputProps={{ step: 1 }} />
-                    <TextField label='height' size="small"
-                        type="number"
-                        value={unit.badge.height}
-                        onChange={makeHandler('height')}
-                        inputProps={{ step: 1 }} />
+            <Stack direction={'row'} minHeight={40} spacing={1}>
+                {currentBadge && <>
+                    <NumberField
+                        label="width"
+                        value={currentBadge.width}
+                        step={1}
+                        onChange={(newValue) => setBadge({ ...currentBadge, width: newValue })} />
+                    <NumberField
+                        label="height"
+                        value={currentBadge.height}
+                        step={1}
+                        onChange={(newValue) => setBadge({ ...currentBadge, height: newValue })} />
                 </>}
             </Stack>
         </Box>

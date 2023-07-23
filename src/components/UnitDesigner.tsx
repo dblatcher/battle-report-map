@@ -128,9 +128,7 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                                 />
                             )}
                         </Stack>
-
                         <BadgePicker unit={unit} setUnit={setUnit} badges={badges} />
-                        <Button variant="contained" onClick={() => { confirm(unit) }}>ok</Button>
                     </Grid>
                     <Grid item xs={4} display={'flex'} justifyContent={'flex-end'}>
                         <UnitFigureInFrame unit={unit} boxProps={{ flex: 1, padding: 1 }} />
@@ -138,7 +136,8 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={close}>close</Button>
+                <Button onClick={close}>cancel</Button>
+                <Button variant="contained" onClick={() => { confirm(unit) }}>confirm</Button>
             </DialogActions>
         </Dialog>
     )
