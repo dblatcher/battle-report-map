@@ -21,7 +21,7 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
         if (!svgRef.current) {
             return
         }
-        svgToPng(svgRef.current, fileName)
+        void svgToPng(svgRef.current, fileName)
     }
 
     const handleClick: MouseEventHandler<SVGSVGElement> = (event) => {

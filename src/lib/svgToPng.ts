@@ -15,8 +15,52 @@ function triggerDownload(imgURI: string, fileName: string) {
 }
 
 
-export function svgToPng(svgNode: SVGSVGElement, fileName: string = 'image.png') {
+async function srcToBase64DataUrl(src: string): Promise<string | undefined> {
+    try {
+        const response = await fetch(src)
+        const blob = await response.blob()
+        const outcome = await new Promise((resolve, reject) => {
+            const reader = Object.assign(new FileReader(), {
+                onload: () => resolve(reader.result),
+                onerror: () => reject(reader.error),
+            });
+            reader.readAsDataURL(blob);
+        });
+        return typeof outcome === 'string' ? outcome : undefined
+    } catch {
+        return undefined
+    }
+}
+
+
+const serialiseImages = async (svgNode: SVGSVGElement): Promise<SVGSVGElement> => {
+    const images = Array.from(svgNode.querySelectorAll('image'))
+    const urlsAlreadyResolved: Partial<Record<string, string>> = {}
+
+    await Promise.all(images.map(async image => {
+        const href = image.getAttribute('href')
+        if (!href) { return }
+        const existingUrl = urlsAlreadyResolved[href]
+        if (existingUrl) {
+            image.setAttribute('href', existingUrl)
+            return
+        }
+        const dataUrl = await srcToBase64DataUrl(href)
+        urlsAlreadyResolved[href] = dataUrl
+        if (!dataUrl) {
+            return
+        }
+        image.setAttribute('href', dataUrl)
+    }))
+
+    return svgNode
+}
+
+export async function svgToPng(svgNode: SVGSVGElement, fileName: string = 'image.png') {
+
+    await serialiseImages(svgNode)
     const svgString = (new XMLSerializer()).serializeToString(svgNode);
+
     const svgBlob = new Blob([svgString], {
         type: 'image/svg+xml;charset=utf-8'
     });
