@@ -4,14 +4,12 @@ import { useObjectState } from "@/lib/useObjectState"
 import { Badge, BattleField, Position, TerrainPiece, Unit, UnitDesign } from "@/types"
 import { AppBar, Box, Button, Container, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
+import { BattleDiagram } from "./BattleDiagram"
 import { BattleFieldDesigner } from "./BattleFieldDesigner"
-import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
-import { FloodRect } from "./FloodRect"
-import { TerrainFigure } from "./TerrainFigure"
 import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
-import { UnitFigure } from "./UnitFigure"
 import { CustomTabPanel, a11yProps } from "./tab-panels"
+import { SaveDialog } from "./SaveDialog"
 
 enum PanelNumbers {
     Terrain,
@@ -20,6 +18,7 @@ enum PanelNumbers {
 
 export const AppMain = () => {
     const [tabOpen, setTabOpen] = useState<PanelNumbers>(0)
+    const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
     const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
     const [battleField, { set: setBattleField, merge: mergeBattleField }] = useObjectState<BattleField>({
@@ -71,39 +70,17 @@ export const AppMain = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Battle map
                     </Typography>
+                    <Button color="inherit" onClick={() => setIsSaveDialogOpen(!isSaveDialogOpen)}>load/save</Button>
                 </Toolbar>
             </AppBar>
             <Container maxWidth={'lg'} sx={{ marginTop: 2 }}>
                 <Grid container>
                     <Grid item xs={8}>
-                        <DownloadableSvgFrame
-                            reportClick={handleFrameClick}
-                            fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={battleField.viewBox}>
-                            <FloodRect fill={battleField.backgroundColor} viewBox={battleField.viewBox} />
-
-                            {terrainPieces.filter(piece => !piece.aboveUnits).map((piece, index) => (
-                                <TerrainFigure
-                                    isActive={activeTerrainPieceIndex === index && tabOpen == PanelNumbers.Terrain}
-                                    terrainPiece={piece}
-                                    key={index} />
-                            ))}
-
-                            {units.map((unit, index) => (
-                                <UnitFigure key={index}
-                                    isActive={activeUnitIndex === index && tabOpen == PanelNumbers.Units}
-                                    showMarkers
-                                    unit={unit}
-                                    onContextMenu={() => { setActiveUnitIndex(index) }}
-                                />
-                            ))}
-
-                            {terrainPieces.filter(piece => piece.aboveUnits).map((piece, index) => (
-                                <TerrainFigure
-                                    isActive={activeTerrainPieceIndex === index && tabOpen == PanelNumbers.Terrain}
-                                    terrainPiece={piece}
-                                    key={index} />
-                            ))}
-                        </DownloadableSvgFrame>
+                        <BattleDiagram
+                            activeUnitIndex={tabOpen == PanelNumbers.Units ? activeUnitIndex : undefined}
+                            activeTerrainPieceIndex={tabOpen == PanelNumbers.Terrain ? activeTerrainPieceIndex : undefined}
+                            {...{ units, terrainPieces, battleField, handleFrameClick, setActiveUnitIndex }}
+                        />
                     </Grid>
 
                     <Grid item xs={4} paddingX={1}>
@@ -154,8 +131,20 @@ export const AppMain = () => {
                     badges={badges}
                     isOpen={unitDesignerOpen}
                     close={() => { setUnitDesignerOpen(false) }} />
-
             </Container>
+
+            <SaveDialog
+                open={isSaveDialogOpen}
+                close={() => { setIsSaveDialogOpen(false) }}
+                currentBattleState={
+                    { battleField, units, terrainPieces }
+                }
+                setBattleState={battleState => {
+                    setBattleField(battleState.battleField)
+                    unitArray.setArray(battleState.units)
+                    terrainPieceArray.setArray(battleState.terrainPieces)
+                }}
+            />
         </Box>
     )
 }

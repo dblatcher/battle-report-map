@@ -56,7 +56,9 @@ const serialiseImages = async (svgNode: SVGSVGElement): Promise<SVGSVGElement> =
     return svgNode
 }
 
-export async function svgToPng(svgNode: SVGSVGElement, fileName: string = 'image.png') {
+export async function svgToPng(svgNodeOriginal: SVGSVGElement, fileName: string = 'image.png') {
+
+    const svgNode = svgNodeOriginal.cloneNode(true) as SVGSVGElement
 
     await serialiseImages(svgNode)
     const svgString = (new XMLSerializer()).serializeToString(svgNode);
@@ -69,8 +71,9 @@ export async function svgToPng(svgNode: SVGSVGElement, fileName: string = 'image
     const url = DOMURL.createObjectURL(svgBlob);
 
     const image = new Image();
-    image.width = svgNode.width.baseVal.value;
-    image.height = svgNode.height.baseVal.value;
+    // clone does not have width and height because (?) not in the dom
+    image.width = svgNodeOriginal.width.baseVal.value;
+    image.height = svgNodeOriginal.height.baseVal.value;
     image.src = url;
 
     image.onload = function () {

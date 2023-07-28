@@ -39,7 +39,7 @@ export type UnitDesign = {
     col1: string;
     col2: string;
     patternShape?: PatternShape;
-    shape: 'rectangle' | 'triangle' |'circle';
+    shape: 'rectangle' | 'triangle' | 'circle';
     badge?: Badge;
     wings?: boolean;
 }
@@ -51,3 +51,9 @@ export type Markers = {
 export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
 
 export type Unit = Position & UnitDesign & Markers
+
+export type BattleState = {
+    battleField: BattleField
+    units: Unit[]
+    terrainPieces: TerrainPiece[]
+}
