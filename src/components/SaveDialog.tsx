@@ -1,7 +1,7 @@
 import { getItemNames, loadItem, saveItem, removeItem } from "@/lib/local-storage"
 import { BattleState } from "@/types"
 import { Button, ButtonGroup, Card, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 interface Props {
     open: boolean
@@ -13,10 +13,12 @@ interface Props {
 const FOLDER_NAME = 'saved-states'
 
 export const SaveDialog = ({ open, close, currentBattleState, setBattleState }: Props) => {
-
-    const [savedFileNames, setSavedFileNames] = useState(getItemNames(FOLDER_NAME))
+    const [savedFileNames, setSavedFileNames] = useState<string[]>([])
     const [fileName, setFileName] = useState('')
 
+    useEffect(() => {
+        setSavedFileNames(getItemNames(FOLDER_NAME))
+    }, [setSavedFileNames])
 
     return (
         <Dialog open={open} onClose={close} fullWidth>
