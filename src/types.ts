@@ -51,7 +51,7 @@ export type Markers = {
 
 export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'
 
-export type Unit = Position & UnitDesign & Markers
+export type Unit = Position & UnitDesign & Markers & { name?: string }
 
 export type BattleState = {
     battleField: BattleField
