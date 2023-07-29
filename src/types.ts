@@ -46,6 +46,7 @@ export type UnitDesign = {
 
 export type Markers = {
     hits?: number;
+    magicHits?: number
 }
 
 export type PatternShape = 'left-diagonal' | 'right-diagonal' | 'vertical'

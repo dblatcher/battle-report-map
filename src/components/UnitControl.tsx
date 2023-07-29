@@ -43,6 +43,10 @@ export const UnitControl = ({ unit, move, index, activeIndex, select, deleteUnit
                         count={unit.hits}
                         label="hits"
                         setCount={(hits) => merge({ hits })} />
+                    <HitButtons
+                        count={unit.magicHits}
+                        label="magic hits"
+                        setCount={(magicHits) => merge({ magicHits })} />
                 </Stack>
             </Box>
         </Stack>
