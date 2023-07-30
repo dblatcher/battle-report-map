@@ -29,7 +29,7 @@ export const UnitControl = ({ unit, index, activeIndex, select, deleteUnit, badg
         <Card sx={{ marginBottom: 1, padding: 1, backgroundColor: 'secondary.light' }} elevation={isActive ? 8 : 3}>
             <Stack>
                 <Stack direction={'row'} spacing={1} alignItems={'center'} justifyContent={'space-between'} >
-                    <TextField size="small" 
+                    <TextField size="small"
                         label="name"
                         value={unit.name ?? ''}
                         onChange={event => merge({ name: event.target.value })}
@@ -40,8 +40,12 @@ export const UnitControl = ({ unit, index, activeIndex, select, deleteUnit, badg
 
                 <Stack direction={'row'} spacing={1} alignItems={'center'}  >
 
-                    <Button variant="contained" sx={{ padding: 0, flexBasis: 100, minHeight: 60 }} onClick={() => { setUnitDesignerOpen(true) }}>
-                        <UnitFigureInFrame unit={unit} boxProps={{ flexBasis: 90 }} />
+                    <Button variant="contained"
+                        sx={{ padding: 0, flexBasis: 100, height: 70, display: 'flex' }}
+                        onClick={() => { setUnitDesignerOpen(true) }}>
+                        <UnitFigureInFrame 
+                            unit={unit} 
+                            boxProps={{ flexBasis: 90, display: 'flex', maxHeight: 70 }} />
                     </Button>
 
                     <Box >
