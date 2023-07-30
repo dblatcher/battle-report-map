@@ -1,9 +1,10 @@
+import { HighPaddedCard } from "@/lib/customCards"
+import { Cartesian } from "@/lib/geometry"
 import { BattleField, TerrainPiece, Unit } from "@/types"
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame"
 import { FloodRect } from "./FloodRect"
 import { TerrainFigure } from "./TerrainFigure"
 import { UnitFigure } from "./UnitFigure"
-import { Cartesian } from "@/lib/geometry"
 
 interface Props {
     battleField: BattleField
@@ -15,6 +16,7 @@ interface Props {
     activeUnitIndex?: number
 }
 
+
 export const BattleDiagram = ({
     battleField,
     terrainPieces, units,
@@ -22,12 +24,12 @@ export const BattleDiagram = ({
     activeTerrainPieceIndex, activeUnitIndex
 }: Props) => {
 
-    
+
 
     return (
         <DownloadableSvgFrame
             reportClick={handleFrameClick}
-            fileName="map.png" boxProps={{ border: '1px solid black', padding: 1 }} viewBox={battleField.viewBox}>
+            fileName="map.png" boxProps={{ component: HighPaddedCard }} viewBox={battleField.viewBox}>
             <FloodRect fill={battleField.backgroundColor} viewBox={battleField.viewBox} />
 
             {terrainPieces.filter(piece => !piece.aboveUnits).map((piece, index) => (

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { NumberField } from "./NumberField";
 import { RotationSlider } from "./RotationSlider";
 import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
+import { hlMyCard } from "@/lib/customCards";
 
 
 type Props = {
@@ -26,10 +27,15 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle, deleteI
 
     return (
         <>
-            <Stack marginTop={1} direction='row' spacing={1} padding={1} borderColor={'primary.dark'} border={1} alignItems={'center'}>
+            <Stack 
+                direction='row' 
+                spacing={1} 
+                alignItems={'center'} 
+                component={hlMyCard({ sx: { marginBottom: 1, padding: 1 }, elevation:isActive ? 8 : 3 })}
+            >
                 <Button variant="outlined" onClick={() => setImageDialogOpen(true)} sx={{ padding: 0 }}>
                     <TerrainPieceInFrame
-                        terrainPiece={terrainPiece}
+                        terrainPiece={terrainPiece} allowRotate
                         boxProps={{ minHeight: 50, minWidth: 50, display: 'flex', alignItems: 'center' }}
                     />
                 </Button>

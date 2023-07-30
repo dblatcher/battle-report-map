@@ -52,6 +52,6 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
         >
             {children}
         </svg>
-        <Button variant='outlined' onClick={download}>download</Button>
+        <Button sx={{ margin: 1 }} variant='outlined' onClick={download}>download</Button>
     </Box>
 }
