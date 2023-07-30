@@ -3,7 +3,7 @@ import { BattleField, TerrainPiece } from "@/types"
 import { Box, Button, Stack, TextField } from "@mui/material"
 import { TerrainDesigner } from "./TerrainDesigner"
 import { terrainImages } from "@/lib/terrainAssets"
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface Props {
     battleField: BattleField
@@ -57,7 +57,12 @@ export const BattleFieldDesigner = ({ battleField, mergeBattleField, terrainPiec
                     />
                 ))}
             </Stack>
-            <Button sx={{ marginTop: 1 }} variant="outlined" fullWidth onClick={addTerrain}>Add Terrain</Button>
+            <Button
+                sx={{ marginTop: 1 }}
+                endIcon={<AddCircleIcon />}
+                variant="outlined"
+                fullWidth
+                onClick={addTerrain}>Add Terrain</Button>
         </Box>
     )
 }

@@ -2,7 +2,7 @@ import { defaultBadges } from "@/lib/badges"
 import { useArrayState } from "@/lib/useArrayState"
 import { useObjectState } from "@/lib/useObjectState"
 import { Badge, BattleField, Position, TerrainPiece, Unit, UnitDesign } from "@/types"
-import { AppBar, Box, Button, Container, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, Container, Grid, Tab, Tabs, Toolbar, Typography, IconButton, Avatar } from "@mui/material"
 import { useState } from "react"
 import { BattleDiagram } from "./BattleDiagram"
 import { BattleFieldDesigner } from "./BattleFieldDesigner"
@@ -10,6 +10,8 @@ import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
 import { CustomTabPanel, a11yProps } from "./tab-panels"
 import { SaveDialog } from "./SaveDialog"
+import SaveIcon from "@mui/icons-material/Save"
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 enum PanelNumbers {
     Terrain,
@@ -70,7 +72,16 @@ export const AppMain = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Battle map
                     </Typography>
-                    <Button color="inherit" onClick={() => setIsSaveDialogOpen(!isSaveDialogOpen)}>load/save</Button>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="save and load"
+                        sx={{ mr: 2 }}
+                        onClick={() => setIsSaveDialogOpen(!isSaveDialogOpen)}
+                    >
+                        <SaveIcon />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Container maxWidth={'lg'} sx={{ marginTop: 2 }}>
@@ -120,6 +131,7 @@ export const AppMain = () => {
                             <Button fullWidth
                                 sx={{ marginTop: 1 }}
                                 variant={'outlined'}
+                                endIcon={<AddCircleIcon />}
                                 onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
                         </CustomTabPanel>
 

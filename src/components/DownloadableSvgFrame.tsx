@@ -2,7 +2,7 @@ import { svgToPng } from "@/lib/svgToPng"
 import { ViewBox } from "@/types"
 import { Box, Button, BoxProps } from "@mui/material"
 import { MouseEventHandler, ReactNode, useRef } from "react"
-
+import Download from "@mui/icons-material/DownloadForOffline"
 
 interface Props {
     boxProps?: BoxProps
@@ -52,6 +52,12 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
         >
             {children}
         </svg>
-        <Button sx={{ margin: 1 }} variant='outlined' onClick={download}>download</Button>
+        <Button
+            sx={{ margin: 1 }}
+            variant='outlined'
+            onClick={download}
+            endIcon={<Download />}
+        >download
+        </Button>
     </Box>
 }

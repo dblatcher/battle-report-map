@@ -2,6 +2,9 @@ import { getItemNames, loadItem, saveItem, removeItem } from "@/lib/local-storag
 import { BattleState } from "@/types"
 import { Button, ButtonGroup, Card, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
+import SaveIcon from "@mui/icons-material/Save"
+import LoadIcon from "@mui/icons-material/Input"
+import DeleteIcon from "@mui/icons-material/DeleteForever"
 
 interface Props {
     open: boolean
@@ -32,15 +35,19 @@ export const SaveDialog = ({ open, close, currentBattleState, setBattleState }: 
 
                                 <Typography>{name}</Typography>
                                 <ButtonGroup size="small">
-                                    <Button onClick={() => {
-                                        const data = loadItem(FOLDER_NAME, name)
-                                        if (!data) { return }
-                                        setBattleState(data as BattleState)
-                                        close()
-                                    }}>load
+                                    <Button
+                                        endIcon={<LoadIcon />}
+                                        onClick={() => {
+                                            const data = loadItem(FOLDER_NAME, name)
+                                            if (!data) { return }
+                                            setBattleState(data as BattleState)
+                                            close()
+                                        }}
+                                    >load
                                     </Button>
                                     <Button
                                         color="warning"
+                                        endIcon={<DeleteIcon />}
                                         onClick={() => {
                                             removeItem(FOLDER_NAME, name)
                                             setSavedFileNames(getItemNames(FOLDER_NAME))
@@ -53,12 +60,16 @@ export const SaveDialog = ({ open, close, currentBattleState, setBattleState }: 
 
                 <Stack direction={'row'} spacing={2}>
 
-                    <TextField value={fileName} onChange={(event) => {
-                        setFileName(event.target.value)
-                    }} />
+                    <TextField
+                        label='map title'
+                        value={fileName}
+                        onChange={(event) => {
+                            setFileName(event.target.value)
+                        }} />
 
                     <Button variant="contained"
                         size="small"
+                        endIcon={<SaveIcon />}
                         onClick={() => {
                             saveItem(FOLDER_NAME, fileName.toString(), currentBattleState)
                             setSavedFileNames(getItemNames(FOLDER_NAME))
