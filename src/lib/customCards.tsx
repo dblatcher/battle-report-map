@@ -6,4 +6,4 @@ export const hlMyCard = (cardProps: CardProps) => {
     return MyCard
 }
 
-export const HighPaddedCard = hlMyCard({ elevation: 4, sx: { padding: 0 } })
+export const HighPaddedCard = hlMyCard({ elevation: 4, sx: { padding: 0, backgroundColor:'secondary.light'}  })

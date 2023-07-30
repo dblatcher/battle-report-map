@@ -52,12 +52,14 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
         >
             {children}
         </svg>
-        <Button
-            sx={{ margin: 1 }}
-            variant='outlined'
-            onClick={download}
-            endIcon={<Download />}
-        >download
-        </Button>
+        <Box padding={1} display={'flex'} justifyContent={'flex-end'}>
+            <Button
+                size="large"
+                variant='contained'
+                onClick={download}
+                endIcon={<Download />}
+            >download
+            </Button>
+        </Box>
     </Box>
 }

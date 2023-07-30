@@ -1,10 +1,11 @@
-import { Badge, Markers, Position, Unit } from "@/types";
-import { Box, Button, ButtonGroup, Card, Checkbox, Stack, TextField } from "@mui/material";
+import { Badge, Position, Unit } from "@/types";
+import DeleteIcon from "@mui/icons-material/Clear";
+import { Box, Button, Card, Checkbox, IconButton, Stack, TextField } from "@mui/material";
 import { useState } from "react";
+import { HitButtons } from "./HitButtons";
 import { RotationSlider } from "./RotationSlider";
 import { UnitDesigner } from "./UnitDesigner";
 import { UnitFigureInFrame } from "./UnitFigureInFrame";
-import { HitButtons } from "./HitButtons";
 
 type Props = {
     unit: Unit,
@@ -25,21 +26,21 @@ export const UnitControl = ({ unit, index, activeIndex, select, deleteUnit, badg
 
     return (<>
 
-        <Card sx={{ marginBottom: 1, padding: 1 }} elevation={isActive ? 8 : 3}>
+        <Card sx={{ marginBottom: 1, padding: 1, backgroundColor: 'secondary.light' }} elevation={isActive ? 8 : 3}>
             <Stack>
-                <Stack direction={'row'} spacing={1} alignItems={'center'}  >
+                <Stack direction={'row'} spacing={1} alignItems={'center'} justifyContent={'space-between'} >
                     <TextField size="small" 
                         label="name"
                         value={unit.name ?? ''}
                         onChange={event => merge({ name: event.target.value })}
                     />
                     <Checkbox size="small" onChange={() => { select(activeIndex !== index) }} checked={isActive} />
-                    <Button variant="outlined" size="small" onClick={deleteUnit}>X</Button>
+                    <IconButton aria-label="delete" onClick={deleteUnit}><DeleteIcon color="primary" /></IconButton>
                 </Stack>
 
                 <Stack direction={'row'} spacing={1} alignItems={'center'}  >
 
-                    <Button variant="outlined" sx={{ padding: 0, flexBasis: 100, minHeight: 60 }} onClick={() => { setUnitDesignerOpen(true) }}>
+                    <Button variant="contained" sx={{ padding: 0, flexBasis: 100, minHeight: 60 }} onClick={() => { setUnitDesignerOpen(true) }}>
                         <UnitFigureInFrame unit={unit} boxProps={{ flexBasis: 90 }} />
                     </Button>
 

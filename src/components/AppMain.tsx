@@ -84,8 +84,8 @@ export const AppMain = () => {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Container maxWidth={'lg'} sx={{ marginTop: 2 }}>
-                <Grid container>
+            <Container maxWidth={'xl'} sx={{ marginTop: 2 }}>
+                <Grid container columnSpacing={2}>
                     <Grid item xs={8}>
                         <BattleDiagram
                             activeUnitIndex={tabOpen == PanelNumbers.Units ? activeUnitIndex : undefined}
@@ -112,27 +112,29 @@ export const AppMain = () => {
                         </CustomTabPanel>
 
                         <CustomTabPanel index={PanelNumbers.Units} value={tabOpen}>
-                            {units.map((unit, index) => (
-                                <UnitControl
-                                    key={index}
-                                    unit={unit}
-                                    index={index}
-                                    activeIndex={activeUnitIndex}
-                                    select={(on) => {
-                                        setActiveUnitIndex(on ? index : undefined)
-                                    }}
-                                    move={(position) => { handleMove(position, index) }}
-                                    deleteUnit={() => { unitArray.deleteItem(index) }}
-                                    merge={(changes) => { unitArray.merge(index, changes) }}
-                                    badges={badges}
-                                />
-                            ))}
+                            <Box paddingTop={1}>
+                                {units.map((unit, index) => (
+                                    <UnitControl
+                                        key={index}
+                                        unit={unit}
+                                        index={index}
+                                        activeIndex={activeUnitIndex}
+                                        select={(on) => {
+                                            setActiveUnitIndex(on ? index : undefined)
+                                        }}
+                                        move={(position) => { handleMove(position, index) }}
+                                        deleteUnit={() => { unitArray.deleteItem(index) }}
+                                        merge={(changes) => { unitArray.merge(index, changes) }}
+                                        badges={badges}
+                                    />
+                                ))}
 
-                            <Button fullWidth
-                                sx={{ marginTop: 1 }}
-                                variant={'outlined'}
-                                endIcon={<AddCircleIcon />}
-                                onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
+                                <Button fullWidth
+                                    sx={{ marginTop: 1 }}
+                                    variant={'outlined'}
+                                    endIcon={<AddCircleIcon />}
+                                    onClick={() => { setUnitDesignerOpen(true) }}>add unit</Button>
+                            </Box>
                         </CustomTabPanel>
 
                     </Grid>

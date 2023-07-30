@@ -1,12 +1,11 @@
 import { terrainImages } from "@/lib/terrainAssets";
 import { ImageAsset, TerrainPiece } from "@/types";
-import { Box, Button, Card, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Stack } from "@mui/material";
+import { Button, Card, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Stack } from "@mui/material";
 import { useState } from "react";
 import { NumberField } from "./NumberField";
 import { RotationSlider } from "./RotationSlider";
 import { TerrainPieceInFrame } from "./TerrainPieceInFrame";
-import { hlMyCard } from "@/lib/customCards";
-
+import DeleteIcon from "@mui/icons-material/Clear";
 
 type Props = {
     terrainPiece: TerrainPiece,
@@ -25,27 +24,27 @@ export const TerrainDesigner = ({ terrainPiece, merge, isActive, toggle, deleteI
         merge({ ...image })
     }
 
+
+
     return (
         <>
-            <Stack 
-                direction='row' 
-                spacing={1} 
-                alignItems={'center'} 
-                component={hlMyCard({ sx: { marginBottom: 1, padding: 1 }, elevation:isActive ? 8 : 3 })}
-            >
-                <Button variant="outlined" onClick={() => setImageDialogOpen(true)} sx={{ padding: 0 }}>
-                    <TerrainPieceInFrame
-                        terrainPiece={terrainPiece} allowRotate
-                        boxProps={{ minHeight: 50, minWidth: 50, display: 'flex', alignItems: 'center' }}
-                    />
-                </Button>
-                <Box>
-                    <Stack direction='row' justifyContent={'space-between'} alignItems={'center'} spacing={1}>
-                        <Checkbox checked={isActive} onChange={toggle} size="small" />
-                        <Button variant="outlined" size="small" onClick={deleteItem}>x</Button>
-                    </Stack>
-                </Box>
-            </Stack >
+            <Card sx={{ marginBottom: 1, padding: 1, backgroundColor: 'secondary.light' }} elevation={isActive ? 8 : 3} >
+                <Stack
+                    direction='row'
+                    spacing={1}
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                >
+                    <Button variant="contained" onClick={() => setImageDialogOpen(true)} sx={{ padding: 0 }}>
+                        <TerrainPieceInFrame
+                            terrainPiece={terrainPiece} allowRotate
+                            boxProps={{ minHeight: 60, minWidth: 60, display: 'flex', alignItems: 'center' }}
+                        />
+                    </Button>
+                    <Checkbox checked={isActive} onChange={toggle} size="small" />
+                    <IconButton aria-label="delete" onClick={deleteItem}><DeleteIcon color="primary" /></IconButton>
+                </Stack >
+            </Card>
 
             <Dialog open={imageDialogOpen} onClose={() => { setImageDialogOpen(false) }} fullWidth>
                 <DialogTitle>Pick Terrain Image</DialogTitle>
