@@ -12,6 +12,7 @@ import { CustomTabPanel, a11yProps } from "./tab-panels"
 import { SaveDialog } from "./SaveDialog"
 import SaveIcon from "@mui/icons-material/Save"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { UnitRoster } from "./UnitRoster"
 
 enum PanelNumbers {
     Terrain,
@@ -113,6 +114,9 @@ export const AppMain = () => {
 
                         <CustomTabPanel index={PanelNumbers.Units} value={tabOpen}>
                             <Box paddingTop={1}>
+
+                                <UnitRoster units={units} unitArray={unitArray} />
+
                                 {units.map((unit, index) => (
                                     <UnitControl
                                         key={index}

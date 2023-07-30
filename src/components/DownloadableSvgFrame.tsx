@@ -6,13 +6,14 @@ import Download from "@mui/icons-material/DownloadForOffline"
 
 interface Props {
     boxProps?: BoxProps
+    innerBoxProps?: BoxProps
     children?: ReactNode
     viewBox?: ViewBox
     fileName: string
     reportClick?: { (coordinates: { x: number, y: number }): void }
 }
 
-export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProps = {}, reportClick }: Props) => {
+export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProps = {}, innerBoxProps = {}, reportClick }: Props) => {
     const svgRef = useRef<SVGSVGElement | null>(null)
     const { minX = 0, minY = 0, width = 100, height = 100 } = viewBox
     const viewBoxString = `${minX} ${minY} ${width} ${height}`
@@ -50,14 +51,16 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
     }
 
     return <Box {...boxProps}>
-        <svg
-            ref={svgRef}
-            viewBox={viewBoxString}
-            xmlns="<http://www.w3.org/2000/svg>"
-            onClick={handleClick}
-        >
-            {children}
-        </svg>
+        <Box {...innerBoxProps}>
+            <svg
+                ref={svgRef}
+                viewBox={viewBoxString}
+                xmlns="http://www.w3.org/2000/svg"
+                onClick={handleClick}
+            >
+                {children}
+            </svg>
+        </Box>
         <Stack padding={1} direction={'row'} justifyContent={'flex-end'} spacing={1}>
             <Button
                 size="large"
