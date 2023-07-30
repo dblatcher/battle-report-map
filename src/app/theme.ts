@@ -3,7 +3,7 @@ import { brown } from '@mui/material/colors';
 
 export const theme = createTheme({
     palette: {
-        secondary: brown
+        secondary: { ...brown, light: brown[50] }
     }
 })
 
