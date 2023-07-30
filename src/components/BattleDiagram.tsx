@@ -25,11 +25,12 @@ export const BattleDiagram = ({
 }: Props) => {
 
 
-
     return (
         <DownloadableSvgFrame
             reportClick={handleFrameClick}
-            fileName="map.png" boxProps={{ component: HighPaddedCard }} viewBox={battleField.viewBox}>
+            fileName="map"
+            boxProps={{ component: HighPaddedCard }}
+            viewBox={battleField.viewBox}>
             <FloodRect fill={battleField.backgroundColor} viewBox={battleField.viewBox} />
 
             {terrainPieces.filter(piece => !piece.aboveUnits).map((piece, index) => (

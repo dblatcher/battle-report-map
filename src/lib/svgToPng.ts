@@ -1,12 +1,11 @@
+const getDomUrl = () => window.URL || window.webkitURL || window
+
 function triggerDownload(imgURI: string, fileName: string) {
     const a = document.createElement('a');
     a.download = fileName
     a.target = '_blank';
     a.href = imgURI;
 
-    // trigger download button
-    // (set `bubbles` to false here.
-    // or just `a.click()` if you don't care about bubbling)
     a.dispatchEvent(new MouseEvent('click', {
         view: window,
         bubbles: false,
@@ -56,10 +55,8 @@ const serialiseImages = async (svgNode: SVGSVGElement): Promise<SVGSVGElement> =
     return svgNode
 }
 
-export async function svgToPng(svgNodeOriginal: SVGSVGElement, fileName: string = 'image.png') {
-
+const svgElementToObjectUrl = async (svgNodeOriginal: SVGSVGElement): Promise<string> => {
     const svgNode = svgNodeOriginal.cloneNode(true) as SVGSVGElement
-
     await serialiseImages(svgNode)
     const svgString = (new XMLSerializer()).serializeToString(svgNode);
 
@@ -67,11 +64,19 @@ export async function svgToPng(svgNodeOriginal: SVGSVGElement, fileName: string 
         type: 'image/svg+xml;charset=utf-8'
     });
 
-    const DOMURL = window.URL || window.webkitURL || window;
-    const url = DOMURL.createObjectURL(svgBlob);
+    return getDomUrl().createObjectURL(svgBlob);
+}
+
+export async function svgToSvgFile(svgNodeOriginal: SVGSVGElement, fileName: string = 'image.png') {
+    const url = await svgElementToObjectUrl(svgNodeOriginal)
+    triggerDownload(url, fileName);
+    getDomUrl().revokeObjectURL(url);
+}
+
+export async function svgToPngFile(svgNodeOriginal: SVGSVGElement, fileName: string = 'image.png') {
+    const url = await svgElementToObjectUrl(svgNodeOriginal)
 
     const image = new Image();
-    // clone does not have width and height because (?) not in the dom
     image.width = svgNodeOriginal.width.baseVal.value;
     image.height = svgNodeOriginal.height.baseVal.value;
     image.src = url;
@@ -86,7 +91,7 @@ export async function svgToPng(svgNodeOriginal: SVGSVGElement, fileName: string 
             return
         }
         ctx.drawImage(image, 0, 0);
-        DOMURL.revokeObjectURL(url);
+        getDomUrl().revokeObjectURL(url);
 
         const imgURI = canvas
             .toDataURL('image/png')

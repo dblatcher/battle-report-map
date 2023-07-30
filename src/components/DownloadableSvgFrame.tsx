@@ -1,6 +1,6 @@
-import { svgToPng } from "@/lib/svgToPng"
+import { svgToPngFile, svgToSvgFile } from "@/lib/svgToPng"
 import { ViewBox } from "@/types"
-import { Box, Button, BoxProps } from "@mui/material"
+import { Box, Button, BoxProps, Stack } from "@mui/material"
 import { MouseEventHandler, ReactNode, useRef } from "react"
 import Download from "@mui/icons-material/DownloadForOffline"
 
@@ -17,11 +17,17 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
     const { minX = 0, minY = 0, width = 100, height = 100 } = viewBox
     const viewBoxString = `${minX} ${minY} ${width} ${height}`
 
-    const download = () => {
+    const downloadPng = () => {
         if (!svgRef.current) {
             return
         }
-        void svgToPng(svgRef.current, fileName)
+        void svgToPngFile(svgRef.current, `${fileName}.png`)
+    }
+    const downloadSvg = () => {
+        if (!svgRef.current) {
+            return
+        }
+        void svgToSvgFile(svgRef.current, `${fileName}.svg`)
     }
 
     const handleClick: MouseEventHandler<SVGSVGElement> = (event) => {
@@ -52,14 +58,21 @@ export const DownloadableSvgFrame = ({ viewBox = {}, children, fileName, boxProp
         >
             {children}
         </svg>
-        <Box padding={1} display={'flex'} justifyContent={'flex-end'}>
+        <Stack padding={1} direction={'row'} justifyContent={'flex-end'} spacing={1}>
+            <Button
+                size="large"
+                variant='outlined'
+                onClick={downloadSvg}
+                endIcon={<Download />}
+            >download svg
+            </Button>
             <Button
                 size="large"
                 variant='contained'
-                onClick={download}
+                onClick={downloadPng}
                 endIcon={<Download />}
-            >download
+            >download png
             </Button>
-        </Box>
+        </Stack>
     </Box>
 }
