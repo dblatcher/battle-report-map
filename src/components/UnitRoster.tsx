@@ -1,12 +1,12 @@
+import { HighPaddedCard } from "@/lib/customCards";
 import { ArrayStateInterface } from "@/lib/useArrayState";
 import { Unit } from "@/types";
-import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { DownloadableSvgFrame } from "./DownloadableSvgFrame";
-import { UnitFigure } from "./UnitFigure";
-import { FloodRect } from "./FloodRect";
-import { HighPaddedCard } from "@/lib/customCards";
 import ViewListIcon from '@mui/icons-material/ViewList';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { DownloadableSvgFrame } from "./DownloadableSvgFrame";
+import { FloodRect } from "./FloodRect";
+import { UnitFigure } from "./UnitFigure";
 
 
 interface Props {
@@ -27,12 +27,20 @@ export const UnitRoster = ({ units }: Props) => {
     const [backgroundColor, setBackgroundColor] = useState('#ffffff')
     const [textColor, setTextColor] = useState('#000000')
     const [font, setFont] = useState(fontlist[0])
+    const [toggles, setToggles] = useState(units.map(unit => true))
+    const [showtoggleList, setShowToggleList] = useState(true)
 
-    const widestUnitWidth = units.reduce<number>((max, nextUnit) => Math.max(max, nextUnit.width), 0)
-    const longestNameLength = units.reduce<number>((max, nextUnit) => Math.max(max, nextUnit.name?.length ?? 0), 0)
+    useEffect(() => {
+        setToggles(units.map(unit => true))
+    }, [units, setToggles])
+
+    const filteredUnits = units.filter((unit, index) => toggles[index])
+
+    const widestUnitWidth = filteredUnits.reduce<number>((max, nextUnit) => Math.max(max, nextUnit.width), 0)
+    const longestNameLength = filteredUnits.reduce<number>((max, nextUnit) => Math.max(max, nextUnit.name?.length ?? 0), 0)
 
     let lastBottom = 10
-    const arrangedUnits: Unit[] = units.map((unit => {
+    const arrangedUnits: Unit[] = filteredUnits.map(((unit) => {
         const newUnit = {
             ...unit,
             heading: 0,
@@ -63,6 +71,14 @@ export const UnitRoster = ({ units }: Props) => {
             <DialogTitle>Unit Roster</DialogTitle>
 
             <DialogActions>
+                <FormControlLabel control={<Switch size="small"
+                    checked={showtoggleList} onChange={event => {
+                        setShowToggleList(event.target.checked)
+                        if (event.target.checked === false) {
+                            setToggles(units.map(unit => true))
+                        }
+                    }}
+                />} label="pick units" />
 
                 <FormControl size="small">
                     <InputLabel>Font</InputLabel>
@@ -97,6 +113,27 @@ export const UnitRoster = ({ units }: Props) => {
             </DialogActions>
 
             <DialogContent>
+
+                {showtoggleList && (
+                    <Stack component='ul' sx={{ listStyle: 'none', paddingInlineStart: 0 }} >
+                        {
+                            units.map((unit, index) => (
+                                <Box key={index} component={'li'} >
+                                    <Switch checked={!!toggles[index]}
+                                        size="small"
+                                        onChange={(event) => {
+                                            const togglesCopy = [...toggles]
+                                            togglesCopy[index] = event.target.checked
+                                            setToggles(togglesCopy)
+                                        }}
+                                    />
+                                    <Typography component={'span'}>{unit.name ?? `Unit #${index + 1}`}</Typography>
+                                </Box>
+                            ))
+                        }
+                    </Stack>
+                )}
+
                 <DownloadableSvgFrame
                     fileName="roster"
                     viewBox={viewBox}
@@ -118,6 +155,6 @@ export const UnitRoster = ({ units }: Props) => {
                     ))}
                 </DownloadableSvgFrame>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     </>
 }
