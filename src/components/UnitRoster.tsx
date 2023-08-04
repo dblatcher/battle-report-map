@@ -1,11 +1,13 @@
 import { ArrayStateInterface } from "@/lib/useArrayState";
 import { Unit } from "@/types";
-import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame";
 import { UnitFigure } from "./UnitFigure";
 import { FloodRect } from "./FloodRect";
 import { HighPaddedCard } from "@/lib/customCards";
+import ViewListIcon from '@mui/icons-material/ViewList';
+
 
 interface Props {
     units: Unit[]
@@ -46,13 +48,14 @@ export const UnitRoster = ({ units }: Props) => {
     const viewBox = { height: lastBottom + 10, width: viewBoxWidth }
 
     return <>
-        <Button
-            variant="contained"
-            sx={{
-                marginY: 1
-            }}
-            fullWidth
-            onClick={() => { setDialogOpen(true) }}>Open roster</Button>
+        <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="Open roster"
+            sx={{ mr: 2 }}
+            onClick={() => { setDialogOpen(true) }}
+        ><ViewListIcon /></IconButton>
 
         <Dialog fullWidth
             open={dialogOpen}
@@ -98,7 +101,7 @@ export const UnitRoster = ({ units }: Props) => {
                     fileName="roster"
                     viewBox={viewBox}
                     boxProps={{ component: HighPaddedCard, marginY: 1, marginX: 3 }}
-                    innerBoxProps={{ maxHeight: 600, display: 'flex', margin: 1 }}
+                    innerBoxProps={{ maxHeight: 450, display: 'flex', margin: 1 }}
                 >
                     <FloodRect fill={backgroundColor} viewBox={viewBox} />
                     {arrangedUnits.map((unit, index) => (
@@ -115,9 +118,6 @@ export const UnitRoster = ({ units }: Props) => {
                     ))}
                 </DownloadableSvgFrame>
             </DialogContent>
-
-
-
         </Dialog>
     </>
 }

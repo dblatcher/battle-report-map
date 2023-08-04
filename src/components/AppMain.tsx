@@ -73,6 +73,8 @@ export const AppMain = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Battle map
                     </Typography>
+
+                    <UnitRoster units={units} unitArray={unitArray}/>
                     <IconButton
                         size="large"
                         edge="start"
@@ -114,8 +116,6 @@ export const AppMain = () => {
 
                         <CustomTabPanel index={PanelNumbers.Units} value={tabOpen}>
                             <Box paddingTop={1}>
-
-                                <UnitRoster units={units} unitArray={unitArray} />
 
                                 {units.map((unit, index) => (
                                     <UnitControl
