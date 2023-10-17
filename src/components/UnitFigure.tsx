@@ -1,8 +1,8 @@
 import { rotate, translate } from "@/lib/geometry";
 import { getCirclePaths, getPoints, getWingPath, pointToString } from "@/lib/shapes";
-import { inDegrees } from "@/lib/uitl";
 import { Unit } from "@/types";
 import { MarkersOnUnit } from "./Markers";
+import { PlacedImage } from "./PlacedImage";
 
 
 type Props = {
@@ -57,21 +57,17 @@ export const UnitFigure = ({ unit, isActive, showMarkers, onContextMenu }: Props
 
     return (
         <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}
-        onContextMenu={(event) => {
-            if (onContextMenu) {
-                event.preventDefault()
-                onContextMenu()
-            }
-        }}
+            onContextMenu={(event) => {
+                if (onContextMenu) {
+                    event.preventDefault()
+                    onContextMenu()
+                }
+            }}
         >
             {shape === 'circle' ? <CircleDesign unit={unit} /> : <PolygonDesign unit={unit} />}
             {badge && (
-                <image {...badge} transform={`
-                translate(${x} ${y})
-                rotate (${inDegrees(-heading)})
-                translate(${-badge.width / 2} ${-badge.height / 2})
-                `}
-                    preserveAspectRatio="none"
+                <PlacedImage asset={badge}
+                    {...{ x, y, heading }}
                 />
             )}
             {showMarkers && <MarkersOnUnit unit={unit} />}
