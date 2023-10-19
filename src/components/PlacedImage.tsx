@@ -2,25 +2,30 @@ import { inDegrees } from "@/lib/uitl"
 import { ImageAsset } from "@/types"
 
 interface Props {
-    asset: ImageAsset
+
+    width: number, height: number,
+    href: string
     x: number,
     y: number,
     heading: number
 }
 
-export const PlacedImage = ({ asset, x, y, heading }: Props) => {
-
-
-    const { width, height, href } = asset
+export const PlacedImage = ({ width, height, href, x, y, heading }: Props) => {
+    const transform = `translate(${x} ${y}) rotate (${inDegrees(-heading)}) translate(${-width / 2} ${-height / 2}) `
 
     return (
-        <g transform={`
-        translate(${x} ${y})
-        rotate (${inDegrees(-heading)})
-        translate(${-width / 2} ${-height / 2})
-        `}>
-            <image href={href} width={width} height={height} preserveAspectRatio="none"
-            />
+        <g transform={transform}>
+            <svg
+                width={width}
+                height={height}
+                viewBox="0 0 100 100"
+            >
+                <image href={href}
+                    width={100}
+                    height={100}
+                    preserveAspectRatio="none"
+                />
+            </svg>
         </g>
     )
 }

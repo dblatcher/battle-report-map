@@ -66,8 +66,8 @@ export const UnitFigure = ({ unit, isActive, showMarkers, onContextMenu }: Props
         >
             {shape === 'circle' ? <CircleDesign unit={unit} /> : <PolygonDesign unit={unit} />}
             {badge && (
-                <PlacedImage asset={badge}
-                    {...{ x, y, heading }}
+                <PlacedImage
+                    {...{ x, y, heading, href: badge.href, width: badge.width, height: badge.height }}
                 />
             )}
             {showMarkers && <MarkersOnUnit unit={unit} />}

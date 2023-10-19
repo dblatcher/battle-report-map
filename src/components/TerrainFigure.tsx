@@ -11,8 +11,7 @@ export const TerrainFigure = ({ terrainPiece, isActive }: Props) => {
     return (
         <g style={isActive ? { filter: 'drop-shadow(0px 0px 9px white' } : {}}>
             <PlacedImage
-                asset={{ href, width, height, description: '' }}
-                {...{ x, y, heading }}
+                {...{ x, y, heading, href, width, height, }}
             />
         </g >
     )
