@@ -1,8 +1,7 @@
+import { useImageDefUseNode } from "@/context/ImageDefProvider"
 import { inDegrees } from "@/lib/uitl"
-import { ImageAsset } from "@/types"
 
 interface Props {
-
     width: number, height: number,
     href: string
     x: number,
@@ -12,6 +11,7 @@ interface Props {
 
 export const PlacedImage = ({ width, height, href, x, y, heading }: Props) => {
     const transform = `translate(${x} ${y}) rotate (${inDegrees(-heading)}) translate(${-width / 2} ${-height / 2}) `
+    const useElement = useImageDefUseNode(href)
 
     return (
         <g transform={transform}>
@@ -20,11 +20,13 @@ export const PlacedImage = ({ width, height, href, x, y, heading }: Props) => {
                 height={height}
                 viewBox="0 0 100 100"
             >
-                <image href={href}
-                    width={100}
-                    height={100}
-                    preserveAspectRatio="none"
-                />
+                {useElement ||
+                    <image href={href}
+                        width={100}
+                        height={100}
+                        preserveAspectRatio="none"
+                    />
+                }
             </svg>
         </g>
     )
