@@ -12,7 +12,9 @@ import { CustomTabPanel, a11yProps } from "./tab-panels"
 import { SaveDialog } from "./SaveDialog"
 import SaveIcon from "@mui/icons-material/Save"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import { UnitRoster } from "./UnitRoster"
+import { BadgeBuilder } from "./BadgeBuilder"
 
 enum PanelNumbers {
     Terrain,
@@ -22,6 +24,7 @@ enum PanelNumbers {
 export const AppMain = () => {
     const [tabOpen, setTabOpen] = useState<PanelNumbers>(0)
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
+    const [isBadgeBuilderOpen, setIsBadgeBuilderOpen] = useState(false)
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
     const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
     const [battleField, { set: setBattleField, merge: mergeBattleField }] = useObjectState<BattleField>({
@@ -74,7 +77,17 @@ export const AppMain = () => {
                         Battle map
                     </Typography>
 
-                    <UnitRoster units={units} unitArray={unitArray}/>
+                    <UnitRoster units={units} unitArray={unitArray} />
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="build badges"
+                        sx={{ mr: 2 }}
+                        onClick={() => setIsBadgeBuilderOpen(!isBadgeBuilderOpen)}
+                    >
+                        <AddPhotoAlternateOutlinedIcon />
+                    </IconButton>
                     <IconButton
                         size="large"
                         edge="start"
@@ -163,6 +176,13 @@ export const AppMain = () => {
                     terrainPieceArray.setArray(battleState.terrainPieces)
                 }}
             />
+
+            <BadgeBuilder 
+                saveBadge={(imageAsset)=> {
+                    badgeArray.push(imageAsset)
+                }}
+                isOpen={isBadgeBuilderOpen} 
+                close={() => { setIsBadgeBuilderOpen(false) }} />
         </Box>
     )
 }

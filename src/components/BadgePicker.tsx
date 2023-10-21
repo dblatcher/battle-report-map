@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Badge, UnitDesign } from "@/types";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
@@ -27,7 +28,7 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
                     <Button key={index}
                         onClick={() => { setUnit({ ...unit, badge: { ...badge } }) }}
                     >
-                        <Image src={badge.href}
+                        <img src={badge.href}
                             width={40}
                             height={badge.height * (40 / badge.width)}
                             alt={`select badge: ${badge.description}`} />
