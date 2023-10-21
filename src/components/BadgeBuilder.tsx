@@ -4,6 +4,7 @@ import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, 
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useState } from "react"
 import { UnitFigureInFrame } from "./UnitFigureInFrame"
+import { getStoredImageAssetDescriptions } from "@/lib/image-asset-local-storage";
 
 interface Props {
     isOpen: boolean
@@ -25,8 +26,8 @@ const baseDesign2: UnitDesign = {
     height: 30,
     shape: 'rectangle',
     patternShape: 'vertical',
-    col1: 'brown',
-    col2: 'crimson',
+    col1: 'antiquewhite',
+    col2: 'palegreen',
     wings: true,
 }
 
@@ -42,6 +43,9 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
 
     const [description, setDescription] = useState('')
 
+    //TO DO - not efficient to get his on every render
+    const existingDescriptions = getStoredImageAssetDescriptions()
+    const descriptionInUse = existingDescriptions.includes(description)
 
     const loadImage = async () => {
         setLoadFailure(undefined)
@@ -81,7 +85,6 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
         void loadImage()
     }
 
-    // to do - warn if overriding and existing asset
     const handleSaveAssetButton = () => {
         if (!badgeAsset) { return }
         saveBadge(badgeAsset)
@@ -96,10 +99,10 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
     } : undefined
 
     return (
-        <Dialog open={isOpen} onClose={close} maxWidth={false}>
+        <Dialog open={isOpen} onClose={close} maxWidth={"md"}>
             <DialogTitle>badge builder</DialogTitle>
             <DialogContent>
-                <Box display={'flex'}>
+                <Box display={'flex'} justifyContent={'space-between'}>
                     <Box>
                         <Box display={'flex'} paddingTop={1}>
                             <TextField size="small" label="enter image url" value={urlInput} onChange={(e) => { setUrlInput(e.target.value) }} />
@@ -126,6 +129,11 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
                         <UnitFigureInFrame unit={buildSampleUnit(baseDesign2, badgeAsset)} boxProps={{ width: 200 }} />
                     </Box>
                 </Box>
+                {descriptionInUse && (
+                    <Alert severity="warning" sx={{ maxWidth: 450 }}>
+                        There is already a badge called &ldquo;{description}&rdquo; - saving will replace it
+                    </Alert>
+                )}
             </DialogContent>
 
             <DialogActions>
