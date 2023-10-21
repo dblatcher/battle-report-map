@@ -1,15 +1,17 @@
 type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 type JsonObject = { [key: string]: Json };
 
+const windowInstance: Window | undefined = globalThis.window
+
 function browserHasLocalStorage() {
-    if (!window || typeof window.localStorage !== 'object') {
+    if (!windowInstance || typeof windowInstance.localStorage !== 'object') {
         return false
     }
     return true
 }
 
 function safeGetAndParse(storageKey: string): JsonObject {
-    const contents = window.localStorage.getItem(storageKey)
+    const contents = windowInstance?.localStorage.getItem(storageKey)
     if (!contents) { return {} }
     try {
         const parsed: Json = JSON.parse(contents)
@@ -23,32 +25,32 @@ function safeGetAndParse(storageKey: string): JsonObject {
 }
 
 function saveItem(folderName: string, itemName: string, data: JsonObject): boolean {
-    if (!browserHasLocalStorage) { return false }
+    if (!windowInstance || !browserHasLocalStorage) { return false }
 
-    if (!window.localStorage.getItem(folderName)) {
-        window.localStorage.setItem(folderName, JSON.stringify({}))
+    if (!windowInstance.localStorage.getItem(folderName)) {
+        windowInstance.localStorage.setItem(folderName, JSON.stringify({}))
     }
     const folder: Json = safeGetAndParse(folderName)
 
     folder[itemName] = data
-    window.localStorage.setItem(folderName, JSON.stringify(folder))
+    windowInstance.localStorage.setItem(folderName, JSON.stringify(folder))
 
     return true
 }
 
 function removeItem(folderName: string, itemName: string): boolean {
-    if (!browserHasLocalStorage) { return false }
-    if (!window.localStorage.getItem(folderName)) { return false }
+    if (!windowInstance || !browserHasLocalStorage) { return false }
+    if (!windowInstance.localStorage.getItem(folderName)) { return false }
     const folder = safeGetAndParse(folderName)
     if (!folder[itemName]) { return false }
 
     delete folder[itemName];
-    window.localStorage.setItem(folderName, JSON.stringify(folder))
+    windowInstance.localStorage.setItem(folderName, JSON.stringify(folder))
     return true
 }
 
 function loadItem(folderName: string, itemName: string): JsonObject | undefined {
-    if (!browserHasLocalStorage) { return undefined }
+    if (!windowInstance || !browserHasLocalStorage) { return undefined }
     const folder = safeGetAndParse(folderName)
     const item = folder[itemName]
     if (!item || typeof item !== 'object' || Array.isArray(item)) {
