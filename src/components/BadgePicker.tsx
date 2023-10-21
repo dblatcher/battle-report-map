@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Badge, UnitDesign } from "@/types";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import Image from "next/image";
 import { NumberField } from "./NumberField";
 
 interface Props {
@@ -18,14 +17,15 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
     return (
         <Box>
             <Typography variant='subtitle1'>Badge</Typography>
-            <Stack direction={'row'}>
+            <Stack direction={'row'} flexWrap={'wrap'}>
                 <Button
                     onClick={() => { setBadge(undefined) }}
                 >
                     X
                 </Button>
                 {badges.map((badge, index) => (
-                    <Button key={index}
+                    <Button key={index} title={badge.description}
+                        variant="outlined"
                         onClick={() => { setUnit({ ...unit, badge: { ...badge } }) }}
                     >
                         <img src={badge.href}
@@ -36,7 +36,7 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
                 ))}
             </Stack>
 
-            <Stack direction={'row'} minHeight={40} spacing={1}>
+            <Stack direction={'row'} minHeight={40} spacing={1} paddingTop={1}>
                 {currentBadge && <>
                     <NumberField
                         label="width"

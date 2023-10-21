@@ -1,20 +1,21 @@
 import { defaultBadges } from "@/lib/badges"
+import { getStoredImageAssets, saveStoredImageAsset } from "@/lib/image-asset-local-storage"
 import { useArrayState } from "@/lib/useArrayState"
 import { useObjectState } from "@/lib/useObjectState"
-import { Badge, BattleField, Position, TerrainPiece, Unit, UnitDesign } from "@/types"
-import { AppBar, Box, Button, Container, Grid, Tab, Tabs, Toolbar, Typography, IconButton, Avatar } from "@mui/material"
+import { BattleField, ImageAsset, Position, TerrainPiece, Unit, UnitDesign } from "@/types"
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined'
+import SaveIcon from "@mui/icons-material/Save"
+import { AppBar, Box, Button, Container, Grid, IconButton, Tab, Tabs, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
+import { BadgeBuilder } from "./BadgeBuilder"
 import { BattleDiagram } from "./BattleDiagram"
 import { BattleFieldDesigner } from "./BattleFieldDesigner"
+import { SaveDialog } from "./SaveDialog"
 import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
-import { CustomTabPanel, a11yProps } from "./tab-panels"
-import { SaveDialog } from "./SaveDialog"
-import SaveIcon from "@mui/icons-material/Save"
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import { UnitRoster } from "./UnitRoster"
-import { BadgeBuilder } from "./BadgeBuilder"
+import { CustomTabPanel, a11yProps } from "./tab-panels"
 
 enum PanelNumbers {
     Terrain,
@@ -26,7 +27,7 @@ export const AppMain = () => {
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const [isBadgeBuilderOpen, setIsBadgeBuilderOpen] = useState(false)
     const [unitDesignerOpen, setUnitDesignerOpen] = useState(false)
-    const [badges, badgeArray] = useArrayState<Badge>(defaultBadges)
+
     const [battleField, { set: setBattleField, merge: mergeBattleField }] = useObjectState<BattleField>({
         viewBox: { width: 300, height: 200 },
         backgroundColor: '#44AA33'
@@ -36,6 +37,9 @@ export const AppMain = () => {
     const [units, unitArray] = useArrayState<Unit>([])
     const [activeUnitIndex, setActiveUnitIndex] = useState<number | undefined>(undefined)
     const [activeTerrainPieceIndex, setActiveTerrainPieceIndex] = useState<number | undefined>(undefined)
+
+    const [localBadges, setLocalBadges] = useState<ImageAsset[]>(getStoredImageAssets())
+    const badges = [...defaultBadges, ...localBadges]
 
     const handleConfirmDesign = (newUnit: UnitDesign) => {
         setUnitDesignerOpen(false)
@@ -177,11 +181,12 @@ export const AppMain = () => {
                 }}
             />
 
-            <BadgeBuilder 
-                saveBadge={(imageAsset)=> {
-                    badgeArray.push(imageAsset)
+            <BadgeBuilder
+                saveBadge={(imageAsset) => {
+                    saveStoredImageAsset(imageAsset)
+                    setLocalBadges(getStoredImageAssets())
                 }}
-                isOpen={isBadgeBuilderOpen} 
+                isOpen={isBadgeBuilderOpen}
                 close={() => { setIsBadgeBuilderOpen(false) }} />
         </Box>
     )
