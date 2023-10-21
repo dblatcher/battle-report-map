@@ -2,6 +2,7 @@
 import { Badge, UnitDesign } from "@/types";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { NumberField } from "./NumberField";
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 
 interface Props {
     unit: UnitDesign;
@@ -16,13 +17,8 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
 
     return (
         <Box>
-            <Typography variant='subtitle1'>Badge</Typography>
+            <Typography variant='subtitle1'>Badge: {currentBadge?.description || '[NONE]'}</Typography>
             <Stack direction={'row'} flexWrap={'wrap'}>
-                <Button
-                    onClick={() => { setBadge(undefined) }}
-                >
-                    X
-                </Button>
                 {badges.map((badge, index) => (
                     <Button key={index} title={badge.description}
                         variant="outlined"
@@ -34,6 +30,12 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
                             alt={`select badge: ${badge.description}`} />
                     </Button>
                 ))}
+                <Button
+                    variant="outlined"
+                    onClick={() => { setBadge(undefined) }}
+                >
+                    <HideImageOutlinedIcon sx={{width:40, height:40}}/>
+                </Button>
             </Stack>
 
             <Stack direction={'row'} minHeight={40} spacing={1} paddingTop={1}>
