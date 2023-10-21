@@ -31,7 +31,8 @@ export const BadgePicker = ({ unit, setUnit, badges }: Props) => {
                     </Button>
                 ))}
                 <Button
-                    variant="outlined"
+                    variant="contained"
+                    color="secondary"
                     onClick={() => { setBadge(undefined) }}
                 >
                     <HideImageOutlinedIcon sx={{width:40, height:40}}/>
