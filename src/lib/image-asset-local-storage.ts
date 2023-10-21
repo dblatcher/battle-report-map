@@ -1,5 +1,5 @@
 import { ImageAsset } from "@/types"
-import { getItemNames, loadItem, saveItem } from "./local-storage"
+import { getItemNames, loadItem, removeItem, saveItem } from "./local-storage"
 
 const FOLDER_NAME = "IMAGE_ASSETS"
 
@@ -13,5 +13,9 @@ export const getStoredImageAssets = (): ImageAsset[] => {
 }
 
 export const saveStoredImageAsset = (asset: ImageAsset) => {
-    saveItem(FOLDER_NAME, asset.description, asset)
+    return saveItem(FOLDER_NAME, asset.description, asset)
+}
+
+export const removeStoredImageAsset = (description:string) => {
+    return removeItem(FOLDER_NAME, description)
 }

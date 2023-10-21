@@ -17,6 +17,7 @@ import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
 import { UnitRoster } from "./UnitRoster"
 import { CustomTabPanel, a11yProps } from "./tab-panels"
+import { ImageManager } from "./ImageManager"
 
 enum PanelNumbers {
     Terrain,
@@ -83,6 +84,7 @@ export const AppMain = () => {
                     </Typography>
 
                     <UnitRoster units={units} unitArray={unitArray} />
+                    <ImageManager updateLocalBadges={() => setLocalBadges(getStoredImageAssets())} />
                     <ToolbarButton label="build badges"
                         onClick={() => setIsBadgeBuilderOpen(!isBadgeBuilderOpen)}
                     >

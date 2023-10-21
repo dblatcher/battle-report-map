@@ -81,6 +81,13 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
         void loadImage()
     }
 
+    // to do - warn if overriding and existing asset
+    const handleSaveAssetButton = () => {
+        if (!badgeAsset) { return }
+        saveBadge(badgeAsset)
+        close()
+    }
+
     const badgeAsset: ImageAsset | undefined = verifiedImageUrl ? {
         href: verifiedImageUrl.toString(),
         height: 20,
@@ -124,10 +131,7 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
             <DialogActions>
                 <Button onClick={close}>close</Button>
                 {badgeAsset && (
-                    <Button variant="contained" onClick={() => {
-                        saveBadge(badgeAsset)
-                        close()
-                    }}>Save to browser local storage</Button>
+                    <Button variant="contained" onClick={handleSaveAssetButton}>Save to browser local storage</Button>
                 )}
             </DialogActions>
         </Dialog>
