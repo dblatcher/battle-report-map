@@ -6,12 +6,13 @@ import { BattleField, ImageAsset, Position, TerrainPiece, Unit, UnitDesign } fro
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined'
 import SaveIcon from "@mui/icons-material/Save"
-import { AppBar, Box, Button, Container, Grid, IconButton, Tab, Tabs, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, Container, Grid, Tab, Tabs, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
 import { BadgeBuilder } from "./BadgeBuilder"
 import { BattleDiagram } from "./BattleDiagram"
 import { BattleFieldDesigner } from "./BattleFieldDesigner"
 import { SaveDialog } from "./SaveDialog"
+import { ToolbarButton } from "./ToolbarButton"
 import { UnitControl } from "./UnitControl"
 import { UnitDesigner } from "./UnitDesigner"
 import { UnitRoster } from "./UnitRoster"
@@ -82,26 +83,17 @@ export const AppMain = () => {
                     </Typography>
 
                     <UnitRoster units={units} unitArray={unitArray} />
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="build badges"
-                        sx={{ mr: 2 }}
+                    <ToolbarButton label="build badges"
                         onClick={() => setIsBadgeBuilderOpen(!isBadgeBuilderOpen)}
                     >
                         <AddPhotoAlternateOutlinedIcon />
-                    </IconButton>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="save and load"
-                        sx={{ mr: 2 }}
-                        onClick={() => setIsSaveDialogOpen(!isSaveDialogOpen)}
-                    >
+                    </ToolbarButton>
+
+                    <ToolbarButton label="save and load"
+                        onClick={() => setIsSaveDialogOpen(!isSaveDialogOpen)}>
                         <SaveIcon />
-                    </IconButton>
+                    </ToolbarButton>
+
                 </Toolbar>
             </AppBar>
             <Container maxWidth={'xl'} sx={{ marginTop: 2 }}>

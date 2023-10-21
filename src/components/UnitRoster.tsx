@@ -2,10 +2,11 @@ import { HighPaddedCard } from "@/lib/customCards";
 import { ArrayStateInterface } from "@/lib/useArrayState";
 import { Unit } from "@/types";
 import ViewListIcon from '@mui/icons-material/ViewList';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DownloadableSvgFrame } from "./DownloadableSvgFrame";
 import { FloodRect } from "./FloodRect";
+import { ToolbarButton } from "./ToolbarButton";
 import { UnitFigure } from "./UnitFigure";
 
 
@@ -56,14 +57,10 @@ export const UnitRoster = ({ units }: Props) => {
     const viewBox = { height: lastBottom + 10, width: viewBoxWidth }
 
     return <>
-        <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="Open roster"
-            sx={{ mr: 2 }}
+        <ToolbarButton
+            label="Open roster"
             onClick={() => { setDialogOpen(true) }}
-        ><ViewListIcon /></IconButton>
+        ><ViewListIcon /></ToolbarButton>
 
         <Dialog fullWidth
             open={dialogOpen}
