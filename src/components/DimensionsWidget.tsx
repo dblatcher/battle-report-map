@@ -26,7 +26,6 @@ export const DimensionsWidget = ({ height, setHeight, width, setWidth, reset, st
             return setWidth(newWidth)
         }
         const newHeight = Math.round(newWidth / aspectRatio)
-        console.log({ newWidth, newHeight })
         setWidth(newWidth)
         setHeight(newHeight)
     }
@@ -35,8 +34,6 @@ export const DimensionsWidget = ({ height, setHeight, width, setWidth, reset, st
             return setHeight(newHeight)
         }
         const newWidth = Math.round(newHeight * aspectRatio)
-
-        console.log({ newWidth, newHeight })
         setWidth(newWidth)
         setHeight(newHeight)
     }
