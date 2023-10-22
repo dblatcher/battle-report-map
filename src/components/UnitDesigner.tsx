@@ -73,10 +73,11 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                     <Grid item xs={8}>
                         <Stack direction={'row'} alignItems={'center'} spacing={1} marginTop={1}>
 
+                            {/* dimensions widget doesn work here - maybe because changeUnitProperty triggers rerender */}
+                            {/* to do - try using objectState instead */}
                             <NumberField label='width'
                                 value={unit.width}
                                 onChange={value => changeUnitProperty('width', value)} />
-
                             <NumberField label='height'
                                 value={unit.height}
                                 onChange={value => changeUnitProperty('height', value)} />

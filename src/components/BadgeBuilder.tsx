@@ -7,6 +7,7 @@ import { createRef, useState } from "react";
 import { NumberField } from "./NumberField";
 import { UnitFigureInFrame } from "./UnitFigureInFrame";
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import { DimensionsWidget } from "./DimensionsWidget";
 
 interface Props {
     isOpen: boolean
@@ -142,23 +143,10 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
                                         style={{ maxWidth: 150, height: 'auto' }}
                                     />
                                 </Box>
-                                <Box paddingTop={1}>
-                                    <NumberField
-                                        label="width"
-                                        value={width}
-                                        onChange={setWidth}
-                                        step={1}
-                                    />
-                                    <NumberField
-                                        label="height"
-                                        value={height}
-                                        onChange={setHeight}
-                                        step={1}
-                                    />
-                                    <IconButton onClick={setDimensions} title="reset size">
-                                        <SettingsBackupRestoreIcon />
-                                    </IconButton>
-                                </Box>
+                                <DimensionsWidget
+                                    reset={setDimensions}
+                                    {...{ height, setHeight, width, setWidth }}
+                                />
                             </>
                         )}
                     </Box>
