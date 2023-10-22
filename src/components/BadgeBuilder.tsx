@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { ImageAsset, UnitDesign } from "@/types"
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography, IconButton } from "@mui/material"
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useState } from "react"
-import { UnitFigureInFrame } from "./UnitFigureInFrame"
 import { getStoredImageAssetDescriptions } from "@/lib/image-asset-local-storage";
+import { ImageAsset, UnitDesign } from "@/types";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
+import { createRef, useState } from "react";
+import { NumberField } from "./NumberField";
+import { UnitFigureInFrame } from "./UnitFigureInFrame";
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 interface Props {
     isOpen: boolean
@@ -42,10 +44,14 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
     const [verifiedImageUrl, setVerifiedImageUrl] = useState<URL | undefined>()
 
     const [description, setDescription] = useState('')
+    const [width, setWidth] = useState(0)
+    const [height, setHeight] = useState(0)
 
     //TO DO - not efficient to get his on every render
     const existingDescriptions = getStoredImageAssetDescriptions()
     const descriptionInUse = existingDescriptions.includes(description)
+
+    const imageRef = createRef<HTMLImageElement>()
 
     const loadImage = async () => {
         setLoadFailure(undefined)
@@ -91,10 +97,19 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
         close()
     }
 
+    const setDimensions = () => {
+        const element = imageRef.current
+        if (!element) { return }
+        const { naturalHeight, naturalWidth } = element
+        const scale = Math.min(1, 40 / naturalWidth)
+        setHeight(naturalHeight * scale)
+        setWidth(naturalWidth * scale)
+    }
+
     const badgeAsset: ImageAsset | undefined = verifiedImageUrl ? {
         href: verifiedImageUrl.toString(),
-        height: 20,
-        width: 20,
+        height,
+        width,
         description
     } : undefined
 
@@ -118,9 +133,33 @@ export const BadgeBuilder = ({ isOpen, close, saveBadge }: Props) => {
                             <Alert severity="error">{loadFailure}</Alert>
                         )}
                         {verifiedImageUrl && (
-                            <Box display={'flex'} alignItems={'center'} padding={2}>
-                                <img src={verifiedImageUrl.toString()} alt="loaded image" style={{ maxWidth: 150, height: 'auto' }} />
-                            </Box>
+                            <>
+                                <Box display={'flex'} alignItems={'center'} padding={2}>
+                                    <img ref={imageRef}
+                                        src={verifiedImageUrl.toString()}
+                                        onLoad={setDimensions}
+                                        alt="loaded image"
+                                        style={{ maxWidth: 150, height: 'auto' }}
+                                    />
+                                </Box>
+                                <Box paddingTop={1}>
+                                    <NumberField
+                                        label="width"
+                                        value={width}
+                                        onChange={setWidth}
+                                        step={1}
+                                    />
+                                    <NumberField
+                                        label="height"
+                                        value={height}
+                                        onChange={setHeight}
+                                        step={1}
+                                    />
+                                    <IconButton onClick={setDimensions} title="reset size">
+                                        <SettingsBackupRestoreIcon />
+                                    </IconButton>
+                                </Box>
+                            </>
                         )}
                     </Box>
                     <Box display={'flex'} flexWrap={'wrap'} flexDirection={'column'} alignItems={'center'}>
