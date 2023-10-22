@@ -68,6 +68,11 @@ export const getPoints = (design: UnitDesign): {
             return getTriangularPoints(design)
         case "circle":
             return getRectangularUnitPoints(design)
+        case "image-only":
+            return {
+                outlinePoints: [],
+                patternPoints: [],
+            }
     }
 }
 
@@ -138,13 +143,13 @@ export const getWingPath = (unit: Unit): string => {
 
     const topRight = plot(.5, 2)
     const oneRight = plot(.3, 1.8)
-    const oneRightIn = plot(.3,1.6)
-    const twoRight = plot(.1,1.6)
-    const twoRightIn = plot(.1,1.4)
-    const threeRight = plot(-.1,1.4)
-    const threeRightIn = plot(-.1,1.2)
-    const fourRight = plot(-.3,1.2)
-    const fourRightIn = plot(-.3,1.0)
+    const oneRightIn = plot(.3, 1.6)
+    const twoRight = plot(.1, 1.6)
+    const twoRightIn = plot(.1, 1.4)
+    const threeRight = plot(-.1, 1.4)
+    const threeRightIn = plot(-.1, 1.2)
+    const fourRight = plot(-.3, 1.2)
+    const fourRightIn = plot(-.3, 1.0)
 
     const topLeft = plot(.5, -2)
     const oneLeft = plot(.3, -1.8)

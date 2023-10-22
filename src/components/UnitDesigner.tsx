@@ -53,6 +53,7 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                 switch (value) {
                     case 'circle':
                     case 'triangle':
+                    case 'image-only':
                     case 'rectangle':
                         setUnit({ ...unit, [property]: value })
                         break;
@@ -94,6 +95,7 @@ export const UnitDesigner = ({ confirm, badges, initialDesign, isOpen, close }: 
                                     <MenuItem value={'rectangle'}>rectangle</MenuItem>
                                     <MenuItem value={'triangle'}>triangle</MenuItem>
                                     <MenuItem value={'circle'}>circle</MenuItem>
+                                    <MenuItem value={'image-only'}>image only</MenuItem>
                                 </Select>
                             </FormControl>
 
